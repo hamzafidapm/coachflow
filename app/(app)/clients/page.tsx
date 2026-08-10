@@ -1,137 +1,75 @@
-'use client';
+import { prisma } from '@/lib/prisma';
+import { getDemoCoach } from '@/lib/demo-coach';
+import { formatRelativeTime, formatCentsAsDollars, formatShortDate } from '@/lib/format';
+import { type ClientStatus, type ClientView } from '@/lib/data/clients';
+import { ClientsView } from '@/components/clients-view';
 
-import { useEffect, useMemo, useState } from 'react';
-import { Icon } from '@/components/icon';
-import { ClientTable } from '@/components/client-table';
-import { ClientDetailPanel } from '@/components/client-detail-panel';
-import { Modal } from '@/components/modal';
-import { useToast } from '@/components/toast';
-import { clients as allClients, type ClientStatus } from '@/lib/data/clients';
-import { clientModalSpec, bookingModalSpec } from '@/lib/modal-specs';
+export const dynamic = 'force-dynamic';
 
-const filterOptions: (ClientStatus | 'All')[] = ['All', 'Active', 'Trial', 'Paused', 'Churned'];
-const PER_PAGE = 8;
+function titleCase(status: string): ClientStatus {
+  return (status.charAt(0) + status.slice(1).toLowerCase()) as ClientStatus;
+}
 
-export default function ClientsPage() {
-  const toast = useToast();
-  const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<(typeof filterOptions)[number]>('All');
-  const [page, setPage] = useState(1);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [modal, setModal] = useState<'client' | 'booking' | null>(null);
+export default async function ClientsPage() {
+  const coach = await getDemoCoach();
+  const dbClients = await prisma.client.findMany({
+    where: { coachId: coach.id },
+    orderBy: { name: 'asc' },
+  });
 
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 620);
-    return () => clearTimeout(t);
-  }, []);
+  // Client (CRM contact) and User (platform login) are separate models in this
+  // schema — payments/enrollments/notes live on User. Bridge them by email,
+  // the same way prisma/seed.ts links a payer account to its client record.
+  const emails = dbClients.map((c) => c.email);
+  const payers = await prisma.user.findMany({
+    where: { email: { in: emails } },
+    include: { payments: true, enrollments: true },
+  });
+  const payerByEmail = new Map(payers.map((p) => [p.email, p]));
 
-  const filtered = useMemo(() => {
-    return allClients
-      .filter((c) => filter === 'All' || c.status === filter)
-      .filter((c) => !query || (c.name + c.email).toLowerCase().includes(query.toLowerCase()));
-  }, [filter, query]);
-
-  const pageCount = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
-  const currentPage = Math.min(page, pageCount);
-  const pageSlice = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
-  const pageLabel = `${filtered.length ? (currentPage - 1) * PER_PAGE + 1 : 0}–${Math.min(
-    currentPage * PER_PAGE,
-    filtered.length,
-  )} of ${filtered.length} clients`;
-
-  const selectedClient = allClients.find((c) => c.name === selected) ?? null;
-
-  const spec = modal === 'booking' ? bookingModalSpec : clientModalSpec;
-
-  function submitModal() {
-    const m = modal;
-    setModal(null);
-    if (m === 'client') toast('Invite sent', "They'll get portal access in a moment.");
-    else if (m === 'booking') toast('Booking created', 'Calendar hold added and client notified.');
+  const bookings = await prisma.booking.findMany({
+    where: { coachId: coach.id, clientId: { in: dbClients.map((c) => c.id) } },
+    orderBy: { scheduledAt: 'desc' },
+  });
+  const bookingsByClientId = new Map<string, typeof bookings>();
+  for (const b of bookings) {
+    bookingsByClientId.set(b.clientId, [...(bookingsByClientId.get(b.clientId) ?? []), b]);
   }
 
-  return (
-    <div>
-      <div className="flex flex-wrap items-center gap-2.5">
-        <div className="relative flex items-center flex-1 min-w-[220px] max-w-[340px]">
-          <Icon name="search" className="absolute left-3 text-lg text-text-dim pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search clients"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setPage(1);
-            }}
-            className="w-full h-10 pl-[38px] pr-3 bg-surface border border-border-strong rounded-control text-[13px] outline-none transition-shadow focus:border-accent focus:shadow-[0_0_0_3px_rgba(47,216,166,.12)]"
-          />
-        </div>
-        <div className="flex gap-1 p-1 bg-surface-raised border border-border rounded-[11px]">
-          {filterOptions.map((f) => (
-            <button
-              key={f}
-              type="button"
-              onClick={() => {
-                setFilter(f);
-                setPage(1);
-                setSelected(null);
-              }}
-              className="h-[30px] px-3.5 rounded-lg text-[12.5px] font-semibold transition-colors"
-              style={{ background: filter === f ? '#1B1E22' : 'transparent', color: filter === f ? '#F2F4F7' : '#79808A' }}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-        <div className="flex-1" />
-        <button
-          type="button"
-          onClick={() => setModal('client')}
-          className="flex items-center gap-2 h-10 px-4 rounded-control bg-accent text-accent-ink text-[13.5px] font-bold transition-all hover:bg-accent-hover hover:-translate-y-px"
-        >
-          <Icon name="add" className="text-[19px]" />
-          Add client
-        </button>
-      </div>
+  const clients: ClientView[] = dbClients.map((c) => {
+    const payer = payerByEmail.get(c.email);
+    const succeededPayments = payer?.payments.filter((p) => p.status === 'SUCCEEDED') ?? [];
+    const ltvCents = succeededPayments.reduce((sum, p) => sum + p.amount, 0);
+    const progress = payer?.enrollments.length
+      ? Math.round(payer.enrollments.reduce((sum, e) => sum + e.progressPercent, 0) / payer.enrollments.length)
+      : 0;
+    const clientBookings = bookingsByClientId.get(c.id) ?? [];
 
-      <div
-        className="mt-4 grid gap-4 items-start"
-        style={{ gridTemplateColumns: selectedClient ? '1fr' : 'minmax(0,1fr)' }}
-      >
-        <div
-          className={selectedClient ? 'grid gap-4 items-start lg:grid-cols-[minmax(0,1.6fr)_380px]' : ''}
-        >
-          <ClientTable
-            loading={loading}
-            clients={pageSlice}
-            selected={selected}
-            onSelect={(name) => setSelected(name)}
-            pageLabel={pageLabel}
-            onPrev={() => setPage((p) => Math.max(1, p - 1))}
-            onNext={() => setPage((p) => Math.min(pageCount, p + 1))}
-            onAddClient={() => setModal('client')}
-            hasFilter={filter !== 'All' || query !== ''}
-          />
-          {selectedClient && (
-            <ClientDetailPanel
-              client={selectedClient}
-              onClose={() => setSelected(null)}
-              onBookSession={() => setModal('booking')}
-            />
-          )}
-        </div>
-      </div>
+    return {
+      id: c.id,
+      name: c.name,
+      email: c.email,
+      status: titleCase(c.status),
+      lastActive: formatRelativeTime(c.lastActivityAt),
+      progress,
+      ltv: formatCentsAsDollars(ltvCents),
+      detail: {
+        Notes: c.notes ? [{ icon: 'sticky_note_2', title: 'Note', meta: '', body: c.notes }] : [],
+        Payments: (payer?.payments ?? []).map((p) => ({
+          icon: 'payments',
+          title: `${p.currency.toUpperCase()} payment`,
+          meta: formatShortDate(p.createdAt),
+          body: `${formatCentsAsDollars(p.amount)} · ${p.status.toLowerCase()}`,
+        })),
+        Sessions: clientBookings.map((b) => ({
+          icon: 'videocam',
+          title: `Session · ${b.status.toLowerCase()}`,
+          meta: formatShortDate(b.scheduledAt),
+          body: `${b.duration} min${b.notes ? ` · ${b.notes}` : ''}`,
+        })),
+      },
+    };
+  });
 
-      <Modal
-        open={modal !== null}
-        title={spec.title}
-        sub={spec.sub}
-        cta={spec.cta}
-        fields={spec.fields}
-        onClose={() => setModal(null)}
-        onSubmit={submitModal}
-      />
-    </div>
-  );
+  return <ClientsView clients={clients} />;
 }

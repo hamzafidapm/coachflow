@@ -43,6 +43,12 @@ export function txStatusStyle(status: TxStatus): [string, string] {
   return map[status];
 }
 
+// Maps the Prisma `PaymentStatus` enum to this UI's display labels.
+export function paymentStatusToTx(status: 'SUCCEEDED' | 'PENDING' | 'FAILED' | 'REFUNDED'): TxStatus {
+  const map = { SUCCEEDED: 'Paid', PENDING: 'Pending', FAILED: 'Failed', REFUNDED: 'Refunded' } as const;
+  return map[status];
+}
+
 export { tint, initials };
 
 export const plans = [
@@ -54,10 +60,6 @@ export const plans = [
 const monthlyRevenue = [8.2, 9.1, 8.6, 11.4, 12.9, 12.1, 14.8, 15.6, 14.2, 16.9, 17.4, 18.4];
 const monthLabels = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
 const yearlyRevenue = [96, 112, 141, 158, 174, 190, 168, 205, 221, 214, 236, 248];
-
-export function grossVolume(billing: 'Monthly' | 'Yearly') {
-  return billing === 'Monthly' ? '$18,420' : '$214,860';
-}
 
 export function barsFor(billing: 'Monthly' | 'Yearly') {
   const vals = billing === 'Monthly' ? monthlyRevenue : yearlyRevenue;

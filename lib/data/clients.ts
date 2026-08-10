@@ -42,24 +42,18 @@ export function statusStyle(status: ClientStatus) {
 
 export type DetailRow = { icon: string; title: string; meta: string; body: string };
 
-export const clientDetailData: Record<string, Record<'Notes' | 'Payments' | 'Sessions', DetailRow[]>> = {
-  default: {
-    Notes: [
-      { icon: 'sticky_note_2', title: 'Positioning is the bottleneck', meta: 'Aug 4', body: 'Keeps rewriting the offer instead of shipping it. Assigned the 48-hour launch constraint.' },
-      { icon: 'sticky_note_2', title: 'Wants async between sessions', meta: 'Jul 22', body: 'Prefers Loom updates over live calls in week 3–4. Trialing a hybrid cadence.' },
-    ],
-    Payments: [
-      { icon: 'payments', title: 'Momentum · Monthly', meta: 'Aug 1', body: '$450 · Visa ending 4218 · succeeded' },
-      { icon: 'payments', title: 'Momentum · Monthly', meta: 'Jul 1', body: '$450 · Visa ending 4218 · succeeded' },
-      { icon: 'payments', title: 'Intensive add-on', meta: 'Jun 14', body: '$1,200 · one-time · succeeded' },
-    ],
-    Sessions: [
-      { icon: 'videocam', title: 'Strategy call #9', meta: 'Aug 6', body: '50 min · recording + transcript attached' },
-      { icon: 'videocam', title: 'Strategy call #8', meta: 'Jul 30', body: '50 min · homework: draft two offer variants' },
-    ],
-  },
+// The shape the Clients screen actually renders, built server-side in
+// app/(app)/clients/page.tsx from real Client/User/Payment/Booking rows.
+// `detail` is precomputed per client since Payments/Sessions come from
+// separate tables joined by matching email (Client and User are distinct
+// models — see that page for the full join logic).
+export type ClientView = {
+  id: string;
+  name: string;
+  email: string;
+  status: ClientStatus;
+  lastActive: string;
+  progress: number;
+  ltv: string;
+  detail: Record<'Notes' | 'Payments' | 'Sessions', DetailRow[]>;
 };
-
-export function detailDataFor(_name: string) {
-  return clientDetailData.default;
-}

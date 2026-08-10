@@ -84,10 +84,6 @@ export const courses: CourseSeed[] = [
   },
 ];
 
-export function getCourseBySlug(slug: string) {
-  return courses.find((c) => c.slug === slug);
-}
-
 export function metaLabel(course: CourseSeed) {
   return course.videoSourceType === 'PLAYLIST' ? `${course.moduleCount} videos` : 'Single comprehensive course';
 }

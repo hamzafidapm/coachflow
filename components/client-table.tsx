@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/icon';
 import { useToast } from '@/components/toast';
-import { tint, initials, statusStyle, type ClientSeed } from '@/lib/data/clients';
+import { tint, initials, statusStyle, type ClientView } from '@/lib/data/clients';
 
 const ROW_COLUMNS = '2.1fr 1fr 1.1fr 1fr 40px';
 const columns = [
@@ -36,9 +36,9 @@ export function ClientTable({
   hasFilter,
 }: {
   loading: boolean;
-  clients: ClientSeed[];
+  clients: ClientView[];
   selected: string | null;
-  onSelect: (name: string) => void;
+  onSelect: (id: string) => void;
   pageLabel: string;
   onPrev: () => void;
   onNext: () => void;
@@ -93,11 +93,11 @@ export function ClientTable({
           {clients.map((c) => {
             const t = tint(c.name);
             const [statusBg, statusColor] = statusStyle(c.status);
-            const active = selected === c.name;
+            const active = selected === c.id;
             return (
               <div
-                key={c.name}
-                onClick={() => onSelect(c.name)}
+                key={c.id}
+                onClick={() => onSelect(c.id)}
                 className="grid gap-3 items-center px-[18px] h-[62px] border-b border-[#191C20] cursor-pointer transition-colors hover:bg-[#16191D]"
                 style={{ gridTemplateColumns: ROW_COLUMNS, background: active ? '#16191D' : 'transparent' }}
               >

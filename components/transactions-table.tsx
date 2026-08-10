@@ -2,11 +2,18 @@
 
 import { Icon } from '@/components/icon';
 import { useToast } from '@/components/toast';
-import { transactions, txStatusStyle, tint, initials } from '@/lib/data/payments';
+import { txStatusStyle, tint, initials, type TxStatus } from '@/lib/data/payments';
 
-const COLUMNS = '1.6fr 1.2fr .9fr 1fr .9fr';
+const COLUMNS = '1.8fr 1fr 1fr .9fr';
 
-export function TransactionsTable() {
+export type TransactionRow = {
+  name: string;
+  amount: string;
+  date: string;
+  status: TxStatus;
+};
+
+export function TransactionsTable({ transactions }: { transactions: TransactionRow[] }) {
   const toast = useToast();
 
   return (
@@ -24,17 +31,20 @@ export function TransactionsTable() {
       </div>
 
       <div className="overflow-x-auto">
-        <div className="min-w-[640px]">
+        <div className="min-w-[560px]">
           <div
             className="grid gap-3 px-5 h-[42px] items-center bg-[#0F1114] border-b border-border-hair text-[11.5px] font-bold tracking-[.06em] uppercase text-text-faint"
             style={{ gridTemplateColumns: COLUMNS }}
           >
             <div>Client</div>
-            <div>Plan</div>
             <div>Amount</div>
             <div>Date</div>
             <div>Status</div>
           </div>
+
+          {transactions.length === 0 && (
+            <div className="py-10 text-center text-[13px] text-text-faint">No payments yet.</div>
+          )}
 
           {transactions.map((t, i) => {
             const avatar = tint(t.name);
@@ -56,7 +66,6 @@ export function TransactionsTable() {
                     {t.name}
                   </span>
                 </div>
-                <div className="text-[13px] text-text-muted">{t.plan}</div>
                 <div className="font-mono text-[13px]">{t.amount}</div>
                 <div className="text-[12.5px] text-text-muted">{t.date}</div>
                 <div>

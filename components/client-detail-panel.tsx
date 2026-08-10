@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '@/components/icon';
-import { tint, initials, detailDataFor, type ClientSeed } from '@/lib/data/clients';
+import { tint, initials, type ClientView } from '@/lib/data/clients';
 
 const tabs = ['Notes', 'Payments', 'Sessions'] as const;
 type Tab = (typeof tabs)[number];
@@ -13,13 +13,13 @@ export function ClientDetailPanel({
   onClose,
   onBookSession,
 }: {
-  client: ClientSeed;
+  client: ClientView;
   onClose: () => void;
   onBookSession: () => void;
 }) {
   const [tab, setTab] = useState<Tab>('Notes');
   const t = tint(client.name);
-  const rows = detailDataFor(client.name)[tab];
+  const rows = client.detail[tab];
 
   return (
     <motion.div
@@ -77,6 +77,9 @@ export function ClientDetailPanel({
       </div>
 
       <div className="p-4 pb-5 flex flex-col gap-3 max-h-[420px] overflow-auto">
+        {rows.length === 0 && (
+          <div className="py-6 text-center text-[12.5px] text-text-faint">Nothing here yet.</div>
+        )}
         {rows.map((r, i) => (
           <div key={i} className="flex gap-3 items-start p-3 rounded-xl bg-[#0F1114] border border-border-hair">
             <span className="w-7 h-7 flex-none rounded-[9px] bg-accent/[.12] text-accent flex items-center justify-center">

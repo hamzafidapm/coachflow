@@ -1,76 +1,44 @@
-'use client';
+import { prisma } from '@/lib/prisma';
+import { formatCentsAsDollars, formatDateWithYear } from '@/lib/format';
+import { paymentStatusToTx } from '@/lib/data/payments';
+import { PaymentsView } from '@/components/payments-view';
+import { type TransactionRow } from '@/components/transactions-table';
 
-import { useMemo, useState } from 'react';
-import { Icon } from '@/components/icon';
-import { RevenueBars } from '@/components/revenue-bars';
-import { PlansPanel } from '@/components/plans-panel';
-import { TransactionsTable } from '@/components/transactions-table';
-import { Modal } from '@/components/modal';
-import { useToast } from '@/components/toast';
-import { grossVolume, barsFor } from '@/lib/data/payments';
-import { plansModalSpec } from '@/lib/modal-specs';
+export const dynamic = 'force-dynamic';
 
-const billingOptions = ['Monthly', 'Yearly'] as const;
-type Billing = (typeof billingOptions)[number];
+export default async function PaymentsPage() {
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-export default function PaymentsPage() {
-  const toast = useToast();
-  const [billing, setBilling] = useState<Billing>('Monthly');
-  const [plansOpen, setPlansOpen] = useState(false);
+  const [monthlyAgg, yearlyAgg, payments] = await Promise.all([
+    prisma.payment.aggregate({
+      _sum: { amount: true },
+      where: { status: 'SUCCEEDED', createdAt: { gte: startOfMonth, lt: startOfNextMonth } },
+    }),
+    prisma.payment.aggregate({
+      _sum: { amount: true },
+      where: { status: 'SUCCEEDED', createdAt: { gte: startOfYear } },
+    }),
+    prisma.payment.findMany({
+      include: { user: true },
+      orderBy: { createdAt: 'desc' },
+    }),
+  ]);
 
-  const bars = useMemo(() => barsFor(billing), [billing]);
+  const transactions: TransactionRow[] = payments.map((p) => ({
+    name: p.user.name ?? p.user.email,
+    amount: formatCentsAsDollars(p.amount),
+    date: formatDateWithYear(p.createdAt),
+    status: paymentStatusToTx(p.status),
+  }));
 
   return (
-    <div>
-      <div className="grid gap-4 items-start lg:grid-cols-[1.5fr_1fr]">
-        <div className="p-[22px] bg-surface border border-border rounded-card">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="text-[12.5px] text-[#8A9099] font-semibold">Gross volume</div>
-              <div className="mt-2 text-[32px] font-bold tracking-tight">{grossVolume(billing)}</div>
-              <div className="mt-2 flex items-center gap-1.5 text-[12.5px] text-accent">
-                <Icon name="arrow_upward" className="text-[15px]" />
-                <span className="font-bold">+14.2%</span>
-                <span className="text-text-dim">vs prior period</span>
-              </div>
-            </div>
-            <div className="flex gap-1 p-1 bg-surface-raised border border-border rounded-[10px]">
-              {billingOptions.map((b) => (
-                <button
-                  key={b}
-                  type="button"
-                  onClick={() => setBilling(b)}
-                  className="h-7 px-3 rounded-[7px] text-xs font-semibold transition-colors"
-                  style={{ background: billing === b ? '#1B1E22' : 'transparent', color: billing === b ? '#F2F4F7' : '#79808A' }}
-                >
-                  {b}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-[22px]">
-            <RevenueBars bars={bars} />
-          </div>
-        </div>
-
-        <PlansPanel onEditPlans={() => setPlansOpen(true)} />
-      </div>
-
-      <TransactionsTable />
-
-      <Modal
-        open={plansOpen}
-        title={plansModalSpec.title}
-        sub={plansModalSpec.sub}
-        cta={plansModalSpec.cta}
-        fields={plansModalSpec.fields}
-        onClose={() => setPlansOpen(false)}
-        onSubmit={() => {
-          setPlansOpen(false);
-          toast('Tiers saved', 'New pricing applies to future subscribers.');
-        }}
-      />
-    </div>
+    <PaymentsView
+      grossVolumeMonthly={formatCentsAsDollars(monthlyAgg._sum.amount ?? 0)}
+      grossVolumeYearly={formatCentsAsDollars(yearlyAgg._sum.amount ?? 0)}
+      transactions={transactions}
+    />
   );
 }
