@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
 import { getDemoCoach } from '@/lib/demo-coach';
 import { formatRelativeTime, formatCentsAsDollars, formatShortDate } from '@/lib/format';
@@ -71,5 +72,9 @@ export default async function ClientsPage() {
     };
   });
 
-  return <ClientsView clients={clients} />;
+  return (
+    <Suspense>
+      <ClientsView clients={clients} />
+    </Suspense>
+  );
 }

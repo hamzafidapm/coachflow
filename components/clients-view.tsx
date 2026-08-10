@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/icon';
 import { ClientTable } from '@/components/client-table';
 import { ClientDetailPanel } from '@/components/client-detail-panel';
@@ -14,11 +15,18 @@ const PER_PAGE = 8;
 
 export function ClientsView({ clients: allClients }: { clients: ClientView[] }) {
   const toast = useToast();
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<(typeof filterOptions)[number]>('All');
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string | null>(null);
   const [modal, setModal] = useState<'client' | 'booking' | null>(null);
+
+  // Arriving from global search (?client=<id>) opens that client's detail panel directly.
+  useEffect(() => {
+    const clientId = searchParams.get('client');
+    if (clientId) setSelected(clientId);
+  }, [searchParams]);
 
   const filtered = useMemo(() => {
     return allClients

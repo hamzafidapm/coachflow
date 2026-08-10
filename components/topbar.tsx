@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@/components/icon';
+import { GlobalSearch } from '@/components/global-search';
 
 const titles: Record<string, [string, string]> = {
   '/dashboard': ['Dashboard', "Tuesday, 11 August · here's where the business stands"],
@@ -46,17 +47,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
         <div className="text-xs text-text-faint whitespace-nowrap overflow-hidden text-ellipsis">{sub}</div>
       </div>
 
-      <div className="relative flex-1 max-w-md ml-auto">
-        <Icon
-          name="search"
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-text-dim pointer-events-none"
-        />
-        <input
-          type="text"
-          placeholder="Search clients, courses, invoices…"
-          className="w-full h-[38px] pl-[38px] pr-3 bg-surface border border-border-strong rounded-[11px] text-[13px] outline-none transition-shadow focus:border-accent focus:shadow-[0_0_0_3px_rgba(47,216,166,.12)]"
-        />
-      </div>
+      <GlobalSearch />
 
       <button
         type="button"
