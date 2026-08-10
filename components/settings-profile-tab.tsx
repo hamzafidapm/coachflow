@@ -1,10 +1,30 @@
 'use client';
 
+import { useState, useTransition } from 'react';
 import { useToast } from '@/components/toast';
-import { profileFields } from '@/lib/data/settings';
+import { updateProfile } from '@/lib/actions/settings';
 
-export function SettingsProfileTab() {
+export function SettingsProfileTab({
+  name,
+  email,
+  headline,
+  bookingHandle,
+}: {
+  name: string;
+  email: string;
+  headline: string;
+  bookingHandle: string;
+}) {
   const toast = useToast();
+  const [isPending, startTransition] = useTransition();
+  const [form, setForm] = useState({ name, headline, bookingHandle });
+
+  function save() {
+    startTransition(async () => {
+      await updateProfile(form);
+      toast('Settings saved', 'Profile updated.');
+    });
+  }
 
   return (
     <div>
@@ -36,24 +56,51 @@ export function SettingsProfileTab() {
       </div>
 
       <div className="mt-[22px] grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-        {profileFields.map((f) => (
-          <div key={f.label} className="flex flex-col gap-[7px]">
-            <label className="text-xs font-semibold text-text-muted">{f.label}</label>
-            <input
-              type="text"
-              defaultValue={f.value}
-              className="h-[42px] px-[13px] bg-[#0F1114] border border-border-strong rounded-control text-[13.5px] outline-none transition-shadow focus:border-accent focus:shadow-[0_0_0_3px_rgba(47,216,166,.12)]"
-            />
-          </div>
-        ))}
+        <div className="flex flex-col gap-[7px]">
+          <label className="text-xs font-semibold text-text-muted">Display name</label>
+          <input
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            className="h-[42px] px-[13px] bg-[#0F1114] border border-border-strong rounded-control text-[13.5px] outline-none transition-shadow focus:border-accent focus:shadow-[0_0_0_3px_rgba(47,216,166,.12)]"
+          />
+        </div>
+        <div className="flex flex-col gap-[7px]">
+          <label className="text-xs font-semibold text-text-muted">Headline</label>
+          <input
+            type="text"
+            value={form.headline}
+            onChange={(e) => setForm((f) => ({ ...f, headline: e.target.value }))}
+            className="h-[42px] px-[13px] bg-[#0F1114] border border-border-strong rounded-control text-[13.5px] outline-none transition-shadow focus:border-accent focus:shadow-[0_0_0_3px_rgba(47,216,166,.12)]"
+          />
+        </div>
+        <div className="flex flex-col gap-[7px]">
+          <label className="text-xs font-semibold text-text-muted">Email</label>
+          <input
+            type="text"
+            value={email}
+            disabled
+            className="h-[42px] px-[13px] bg-[#0F1114] border border-border-strong rounded-control text-[13.5px] text-text-faint outline-none"
+          />
+        </div>
+        <div className="flex flex-col gap-[7px]">
+          <label className="text-xs font-semibold text-text-muted">Booking handle</label>
+          <input
+            type="text"
+            value={form.bookingHandle}
+            onChange={(e) => setForm((f) => ({ ...f, bookingHandle: e.target.value }))}
+            className="h-[42px] px-[13px] bg-[#0F1114] border border-border-strong rounded-control text-[13.5px] outline-none transition-shadow focus:border-accent focus:shadow-[0_0_0_3px_rgba(47,216,166,.12)]"
+          />
+        </div>
       </div>
 
       <button
         type="button"
-        onClick={() => toast('Settings saved', 'Profile updated.')}
-        className="mt-[22px] h-10 px-[18px] rounded-control bg-accent text-accent-ink text-[13px] font-bold transition-colors hover:bg-accent-hover"
+        onClick={save}
+        disabled={isPending}
+        className="mt-[22px] h-10 px-[18px] rounded-control bg-accent text-accent-ink text-[13px] font-bold transition-colors hover:bg-accent-hover disabled:opacity-60"
       >
-        Save changes
+        {isPending ? 'Saving…' : 'Save changes'}
       </button>
     </div>
   );

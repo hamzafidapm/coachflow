@@ -1,14 +1,26 @@
 'use client';
 
+import { useState, useTransition } from 'react';
+import { useToast } from '@/components/toast';
 import { notificationDefs } from '@/lib/data/settings';
+import { toggleNotification, type NotificationField } from '@/lib/actions/settings';
 
 export function SettingsNotificationsTab({
-  notifs,
-  onToggle,
+  values,
 }: {
-  notifs: boolean[];
-  onToggle: (index: number) => void;
+  values: Record<NotificationField, boolean>;
 }) {
+  const toast = useToast();
+  const [, startTransition] = useTransition();
+  const [state, setState] = useState(values);
+
+  function toggle(field: NotificationField) {
+    const next = !state[field];
+    setState((s) => ({ ...s, [field]: next }));
+    startTransition(() => toggleNotification(field, next));
+    toast('Preferences saved', next ? 'You’ll get this notification.' : 'This notification is now muted.');
+  }
+
   return (
     <div>
       <div className="text-[15px] font-bold">Notifications</div>
@@ -17,11 +29,11 @@ export function SettingsNotificationsTab({
       </div>
 
       <div className="mt-5 flex flex-col gap-2.5">
-        {notificationDefs.map((n, i) => {
-          const isOn = notifs[i];
+        {notificationDefs.map((n) => {
+          const isOn = state[n.field];
           return (
             <div
-              key={n.label}
+              key={n.field}
               className="flex items-center justify-between gap-4 py-3.5 px-4 rounded-xl bg-[#0F1114] border border-border-hair"
             >
               <div>
@@ -30,7 +42,7 @@ export function SettingsNotificationsTab({
               </div>
               <button
                 type="button"
-                onClick={() => onToggle(i)}
+                onClick={() => toggle(n.field)}
                 className="w-10 h-[23px] flex-none rounded-full relative transition-colors duration-200"
                 style={{ background: isOn ? '#2FD8A6' : '#26292F' }}
               >

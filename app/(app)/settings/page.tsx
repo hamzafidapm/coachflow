@@ -1,31 +1,34 @@
-'use client';
+import { prisma } from '@/lib/prisma';
+import { getDemoCoach } from '@/lib/demo-coach';
+import { SettingsView } from '@/components/settings-view';
 
-import { useState } from 'react';
-import { SettingsTabs } from '@/components/settings-tabs';
-import { SettingsProfileTab } from '@/components/settings-profile-tab';
-import { SettingsBrandingTab } from '@/components/settings-branding-tab';
-import { SettingsNotificationsTab } from '@/components/settings-notifications-tab';
-import { SettingsIntegrationsTab } from '@/components/settings-integrations-tab';
-import { defaultNotifs, type SettingsTab } from '@/lib/data/settings';
+export const dynamic = 'force-dynamic';
 
-export default function SettingsPage() {
-  const [tab, setTab] = useState<SettingsTab>('Profile');
-  const [notifs, setNotifs] = useState(defaultNotifs);
-
-  function toggleNotif(i: number) {
-    setNotifs((n) => n.map((v, idx) => (idx === i ? !v : v)));
-  }
+export default async function SettingsPage() {
+  const coach = await getDemoCoach();
+  const settings = await prisma.coachSettings.findUniqueOrThrow({ where: { coachId: coach.id } });
 
   return (
-    <div className="grid gap-4 items-start lg:grid-cols-[212px_1fr]">
-      <SettingsTabs active={tab} onChange={setTab} />
-
-      <div className="p-6 bg-surface border border-border rounded-card">
-        {tab === 'Profile' && <SettingsProfileTab />}
-        {tab === 'Branding' && <SettingsBrandingTab />}
-        {tab === 'Notifications' && <SettingsNotificationsTab notifs={notifs} onToggle={toggleNotif} />}
-        {tab === 'Integrations' && <SettingsIntegrationsTab />}
-      </div>
-    </div>
+    <SettingsView
+      name={coach.name ?? ''}
+      email={coach.email}
+      headline={settings.headline}
+      bookingHandle={settings.bookingHandle}
+      accentColor={settings.accentColor}
+      portalTheme={settings.portalTheme}
+      notifications={{
+        notifyNewBooking: settings.notifyNewBooking,
+        notifyPaymentReceived: settings.notifyPaymentReceived,
+        notifyLessonCompleted: settings.notifyLessonCompleted,
+        notifyFailedPayment: settings.notifyFailedPayment,
+        notifyWeeklySummary: settings.notifyWeeklySummary,
+      }}
+      integrations={{
+        stripeConnected: settings.stripeConnected,
+        googleCalendarConnected: settings.googleCalendarConnected,
+        zoomConnected: settings.zoomConnected,
+        mailchimpConnected: settings.mailchimpConnected,
+      }}
+    />
   );
 }

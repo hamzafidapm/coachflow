@@ -40,6 +40,7 @@ async function main() {
   await prisma.enrollment.deleteMany();
   await prisma.client.deleteMany();
   await prisma.course.deleteMany();
+  await prisma.coachSettings.deleteMany();
   await prisma.user.deleteMany();
 
   console.log('Creating coach...');
@@ -49,6 +50,26 @@ async function main() {
       email: COACH_EMAIL,
       passwordHash: await bcrypt.hash(COACH_PASSWORD, 10),
       role: 'COACH',
+    },
+  });
+
+  console.log('Creating coach settings...');
+  await prisma.coachSettings.create({
+    data: {
+      coachId: coach.id,
+      headline: 'Business coach for solo consultants',
+      bookingHandle: 'coachflow.co/maya',
+      accentColor: '#2FD8A6',
+      portalTheme: 'DARK',
+      notifyNewBooking: true,
+      notifyPaymentReceived: true,
+      notifyLessonCompleted: false,
+      notifyFailedPayment: true,
+      notifyWeeklySummary: false,
+      stripeConnected: true,
+      googleCalendarConnected: true,
+      zoomConnected: false,
+      mailchimpConnected: false,
     },
   });
 

@@ -45,6 +45,11 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum PortalTheme {
+  DARK
+  LIGHT
+}
+
 model User {
   id           String   @id @default(cuid())
   name         String?
@@ -59,6 +64,7 @@ model User {
   bookings       Booking[]      @relation("CoachBookings")
   subscriptions  Subscription[]
   payments       Payment[]
+  coachSettings  CoachSettings?
 
   @@map("users")
 }
@@ -145,4 +151,37 @@ model Payment {
   createdAt       DateTime      @default(now())
 
   @@map("payments")
+}
+
+// One row per coach — keeps User lean while holding everything the Settings
+// screen (Profile/Branding/Notifications/Integrations) needs to persist.
+model CoachSettings {
+  id             String      @id @default(cuid())
+  coachId        String      @unique
+  coach          User        @relation(fields: [coachId], references: [id])
+
+  // Profile
+  headline       String      @default("")
+  bookingHandle  String      @default("")
+
+  // Branding
+  accentColor    String      @default("#2FD8A6")
+  portalTheme    PortalTheme @default(DARK)
+
+  // Notifications
+  notifyNewBooking      Boolean @default(true)
+  notifyPaymentReceived Boolean @default(true)
+  notifyLessonCompleted Boolean @default(false)
+  notifyFailedPayment   Boolean @default(true)
+  notifyWeeklySummary   Boolean @default(false)
+
+  // Integrations
+  stripeConnected         Boolean @default(false)
+  googleCalendarConnected Boolean @default(false)
+  zoomConnected           Boolean @default(false)
+  mailchimpConnected      Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+
+  @@map("coach_settings")
 }

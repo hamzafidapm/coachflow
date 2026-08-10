@@ -1,14 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { Icon } from '@/components/icon';
 import { useToast } from '@/components/toast';
 import { accentSwatches, themeOptions } from '@/lib/data/settings';
+import { updateAccentColor, updatePortalTheme } from '@/lib/actions/settings';
 
-export function SettingsBrandingTab() {
+export function SettingsBrandingTab({
+  accentColor,
+  portalTheme,
+}: {
+  accentColor: string;
+  portalTheme: 'DARK' | 'LIGHT';
+}) {
   const toast = useToast();
-  const [accent, setAccent] = useState(accentSwatches[0]);
-  const [theme, setTheme] = useState<(typeof themeOptions)[number]>('Dark');
+  const [, startTransition] = useTransition();
+  const [accent, setAccent] = useState(accentColor);
+  const [theme, setTheme] = useState(portalTheme);
 
   return (
     <div>
@@ -33,6 +41,7 @@ export function SettingsBrandingTab() {
                 title={c}
                 onClick={() => {
                   setAccent(c);
+                  startTransition(() => updateAccentColor(c));
                   toast('Accent updated', `Your public page now uses ${c}.`);
                 }}
                 className="w-[34px] h-[34px] rounded-[10px] transition-transform hover:scale-[1.08]"
@@ -43,15 +52,16 @@ export function SettingsBrandingTab() {
 
           <div className="mt-[18px] text-[12.5px] font-semibold text-text-muted">Portal theme</div>
           <div className="mt-2.5 flex gap-2">
-            {themeOptions.map((label) => {
-              const isActive = theme === label;
+            {themeOptions.map((opt) => {
+              const isActive = theme === opt.value;
               return (
                 <button
-                  key={label}
+                  key={opt.value}
                   type="button"
                   onClick={() => {
-                    setTheme(label);
-                    toast('Theme set', `${label} portal theme applied.`);
+                    setTheme(opt.value);
+                    startTransition(() => updatePortalTheme(opt.value));
+                    toast('Theme set', `${opt.label} portal theme applied.`);
                   }}
                   className="h-8 px-3.5 rounded-[9px] text-[12.5px] font-semibold transition-colors"
                   style={{
@@ -60,7 +70,7 @@ export function SettingsBrandingTab() {
                     border: `1px solid ${isActive ? '#33373E' : '#24272C'}`,
                   }}
                 >
-                  {label}
+                  {opt.label}
                 </button>
               );
             })}
