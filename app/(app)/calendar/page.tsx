@@ -9,8 +9,13 @@ export default async function CalendarPage() {
   const coach = await getDemoCoach();
   const bookings = await prisma.booking.findMany({
     where: { coachId: coach.id },
-    include: { client: true },
     orderBy: { scheduledAt: 'asc' },
+    select: {
+      scheduledAt: true,
+      duration: true,
+      notes: true,
+      client: { select: { name: true } },
+    },
   });
 
   // Bookings were seeded with UTC-constructed timestamps (see prisma/seed.ts),

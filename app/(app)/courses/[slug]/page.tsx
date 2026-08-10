@@ -11,7 +11,16 @@ export default async function CourseLessonPage({ params }: { params: { slug: str
   const coach = await getDemoCoach();
   const dbCourses = await prisma.course.findMany({
     where: { coachId: coach.id },
-    include: { _count: { select: { enrollments: true } } },
+    select: {
+      title: true,
+      category: true,
+      description: true,
+      coverImageUrl: true,
+      videoSourceUrl: true,
+      videoSourceType: true,
+      moduleCount: true,
+      _count: { select: { enrollments: true } },
+    },
   });
 
   const match = dbCourses.find((c) => slugify(c.title) === params.slug);

@@ -1,5 +1,3 @@
-'use client';
-
 import { Icon } from '@/components/icon';
 import { CountUp } from '@/components/count-up';
 

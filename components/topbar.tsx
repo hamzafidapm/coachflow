@@ -33,16 +33,16 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
   const [title, sub] = screenTitleFor(pathname ?? '/dashboard');
 
   return (
-    <header className="sticky top-0 z-30 flex items-center gap-[18px] h-[66px] px-7 bg-bg/80 backdrop-blur-md border-b border-border-hair">
+    <header className="sticky top-0 z-30 flex items-center gap-2.5 sm:gap-[18px] h-[66px] px-3 sm:px-7 bg-bg/80 backdrop-blur-md border-b border-border-hair">
       <button
         type="button"
         onClick={onToggleSidebar}
-        className="w-9 h-9 flex-none flex items-center justify-center border border-border-strong rounded-[10px] bg-surface text-text-muted transition-colors hover:bg-[#191C20] hover:text-text"
+        className="w-11 h-11 flex-none flex items-center justify-center border border-border-strong rounded-[10px] bg-surface text-text-muted transition-colors hover:bg-[#191C20] hover:text-text"
       >
         <Icon name="menu" className="text-xl" />
       </button>
 
-      <div className="min-w-0">
+      <div className="min-w-0 hidden sm:block">
         <div className="text-[15px] font-bold whitespace-nowrap overflow-hidden text-ellipsis">{title}</div>
         <div className="text-xs text-text-faint whitespace-nowrap overflow-hidden text-ellipsis">{sub}</div>
       </div>
@@ -51,7 +51,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
 
       <button
         type="button"
-        className="relative w-[38px] h-[38px] flex-none flex items-center justify-center border border-border-strong rounded-[11px] bg-surface text-text-muted transition-colors hover:bg-[#191C20] hover:text-text"
+        className="relative w-11 h-11 flex-none flex items-center justify-center border border-border-strong rounded-[11px] bg-surface text-text-muted transition-colors hover:bg-[#191C20] hover:text-text"
       >
         <Icon name="notifications" className="text-xl" />
         <span className="absolute top-2 right-[9px] w-[7px] h-[7px] rounded-full bg-accent ring-2 ring-surface" />
@@ -61,7 +61,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
         <button
           type="button"
           onClick={() => setProfileOpen((v) => !v)}
-          className="flex items-center gap-2 h-[38px] pl-1 pr-2 border border-border-strong rounded-[11px] bg-surface text-text transition-colors hover:bg-[#191C20]"
+          className="flex items-center gap-2 h-11 pl-1 pr-2 border border-border-strong rounded-[11px] bg-surface text-text transition-colors hover:bg-[#191C20]"
         >
           <span className="w-7 h-7 rounded-lg bg-accent/[.16] text-accent flex items-center justify-center text-xs font-bold">
             MC
@@ -75,7 +75,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: -4 }}
               transition={{ duration: 0.16, ease: [0.4, 0, 0.2, 1] }}
-              className="absolute right-0 top-[46px] w-[212px] p-1.5 bg-surface-panel border border-border-strong rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,.55)]"
+              className="absolute right-0 top-[52px] w-[212px] p-1.5 bg-surface-panel border border-border-strong rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,.55)]"
             >
               <div className="px-2.5 pt-2 pb-3 border-b border-border-hair">
                 <div className="text-[13px] font-bold">Maya Chen</div>

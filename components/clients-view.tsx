@@ -69,7 +69,7 @@ export function ClientsView({ clients: allClients }: { clients: ClientView[] }) 
             className="w-full h-10 pl-[38px] pr-3 bg-surface border border-border-strong rounded-control text-[13px] outline-none transition-shadow focus:border-accent focus:shadow-[0_0_0_3px_rgba(47,216,166,.12)]"
           />
         </div>
-        <div className="flex gap-1 p-1 bg-surface-raised border border-border rounded-[11px]">
+        <div className="flex gap-1 p-1 bg-surface-raised border border-border rounded-[11px] overflow-x-auto max-w-full">
           {filterOptions.map((f) => (
             <button
               key={f}
@@ -79,7 +79,7 @@ export function ClientsView({ clients: allClients }: { clients: ClientView[] }) 
                 setPage(1);
                 setSelected(null);
               }}
-              className="h-[30px] px-3.5 rounded-lg text-[12.5px] font-semibold transition-colors"
+              className="h-[30px] px-3.5 rounded-lg text-[12.5px] font-semibold whitespace-nowrap transition-colors"
               style={{ background: filter === f ? '#1B1E22' : 'transparent', color: filter === f ? '#F2F4F7' : '#79808A' }}
             >
               {f}

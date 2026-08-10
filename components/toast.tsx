@@ -57,7 +57,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => setCurrent(null)}
-              className="w-[26px] h-[26px] flex items-center justify-center rounded-lg bg-transparent text-text-dim transition-colors hover:text-text"
+              className="w-11 h-11 flex-none flex items-center justify-center rounded-lg bg-transparent text-text-dim transition-colors hover:text-text"
             >
               <Icon name="close" className="text-base" />
             </button>

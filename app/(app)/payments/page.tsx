@@ -22,8 +22,13 @@ export default async function PaymentsPage() {
       where: { status: 'SUCCEEDED', createdAt: { gte: startOfYear } },
     }),
     prisma.payment.findMany({
-      include: { user: true },
       orderBy: { createdAt: 'desc' },
+      select: {
+        amount: true,
+        status: true,
+        createdAt: true,
+        user: { select: { name: true, email: true } },
+      },
     }),
   ]);
 

@@ -19,7 +19,7 @@ export function CalendarMonthView({
   });
 
   return (
-    <div>
+    <div className="min-w-[640px]">
       <div className="grid gap-1.5 pb-2.5" style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}>
         {dowLabels.map((d) => (
           <div key={d} className="text-center text-[11px] tracking-[.08em] text-text-dim">

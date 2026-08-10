@@ -32,11 +32,13 @@ export async function globalSearch(rawQuery: string): Promise<SearchResults> {
       },
       orderBy: { name: 'asc' },
       take: LIMIT,
+      select: { id: true, name: true, email: true, status: true },
     }),
     prisma.course.findMany({
       where: { coachId: coach.id, title: { contains: q, mode: 'insensitive' } },
       orderBy: { title: 'asc' },
       take: LIMIT,
+      select: { title: true, category: true },
     }),
     prisma.payment.findMany({
       where: {
@@ -44,9 +46,15 @@ export async function globalSearch(rawQuery: string): Promise<SearchResults> {
           OR: [{ name: { contains: q, mode: 'insensitive' } }, { email: { contains: q, mode: 'insensitive' } }],
         },
       },
-      include: { user: true },
       orderBy: { createdAt: 'desc' },
       take: LIMIT,
+      select: {
+        id: true,
+        amount: true,
+        status: true,
+        createdAt: true,
+        user: { select: { name: true, email: true } },
+      },
     }),
   ]);
 

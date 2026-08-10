@@ -41,7 +41,7 @@ export function EventDetailModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-[30px] h-[30px] flex items-center justify-center rounded-[9px] bg-[#191C20] text-[#8A9099] transition-colors hover:bg-[#22262B]"
+                className="w-11 h-11 flex-none flex items-center justify-center rounded-[9px] bg-[#191C20] text-[#8A9099] transition-colors hover:bg-[#22262B]"
               >
                 <Icon name="close" className="text-lg" />
               </button>

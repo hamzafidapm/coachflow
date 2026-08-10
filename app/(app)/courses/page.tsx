@@ -11,7 +11,16 @@ export default async function CoursesPage() {
   const dbCourses = await prisma.course.findMany({
     where: { coachId: coach.id },
     orderBy: { createdAt: 'asc' },
-    include: { _count: { select: { enrollments: true } } },
+    select: {
+      title: true,
+      category: true,
+      description: true,
+      coverImageUrl: true,
+      videoSourceUrl: true,
+      videoSourceType: true,
+      moduleCount: true,
+      _count: { select: { enrollments: true } },
+    },
   });
 
   const courses: CourseSeed[] = dbCourses.map((c) => ({

@@ -19,7 +19,7 @@ export function CalendarWeekView({
   const columns = Array.from({ length: 7 }, (_, d) => events.filter((e) => e.day === d));
 
   return (
-    <div>
+    <div className="min-w-[720px]">
       <div
         className="grid gap-1.5 pb-2.5 border-b border-border-hair"
         style={{ gridTemplateColumns: '52px repeat(7, 1fr)' }}
