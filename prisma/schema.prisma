@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  COACH
+  STUDENT
+}
+
+enum VideoSourceType {
+  PLAYLIST
+  SINGLE
+}
+
+enum ClientStatus {
+  ACTIVE
+  TRIAL
+  PAUSED
+  CHURNED
+}
+
+enum BookingStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELLED
+}
+
+enum PaymentStatus {
+  SUCCEEDED
+  PENDING
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String?
+  role         Role     @default(STUDENT)
+  createdAt    DateTime @default(now())
+
+  coachedCourses Course[]       @relation("CoachCourses")
+  enrollments    Enrollment[]
+  clients        Client[]       @relation("CoachClients")
+  bookings       Booking[]      @relation("CoachBookings")
+  subscriptions  Subscription[]
+  payments       Payment[]
+
+  @@map("users")
+}
+
+model Course {
+  id              String          @id @default(cuid())
+  title           String
+  description     String
+  category        String
+  coverImageUrl   String
+  videoSourceUrl  String
+  videoSourceType VideoSourceType
+  moduleCount     Int
+  coachId         String
+  coach           User            @relation("CoachCourses", fields: [coachId], references: [id])
+  enrollments     Enrollment[]
+  createdAt       DateTime        @default(now())
+
+  @@map("courses")
+}
+
+model Enrollment {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  courseId        String
+  course          Course   @relation(fields: [courseId], references: [id])
+  progressPercent Int      @default(0)
+  enrolledAt      DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model Client {
+  id             String       @id @default(cuid())
+  coachId        String
+  coach          User         @relation("CoachClients", fields: [coachId], references: [id])
+  name           String
+  email          String
+  status         ClientStatus @default(TRIAL)
+  notes          String?
+  lastActivityAt DateTime     @default(now())
+  bookings       Booking[]
+
+  @@map("clients")
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  coachId     String
+  coach       User          @relation("CoachBookings", fields: [coachId], references: [id])
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id])
+  scheduledAt DateTime
+  duration    Int
+  status      BookingStatus @default(SCHEDULED)
+  notes       String?
+
+  @@map("bookings")
+}
+
+model Subscription {
+  id                   String              @id @default(cuid())
+  userId               String
+  user                 User                @relation(fields: [userId], references: [id])
+  stripeCustomerId     String
+  stripeSubscriptionId String              @unique
+  plan                 String
+  status               SubscriptionStatus  @default(TRIALING)
+  currentPeriodEnd     DateTime
+
+  @@map("subscriptions")
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  amount          Int
+  currency        String        @default("usd")
+  status          PaymentStatus @default(PENDING)
+  stripePaymentId String        @unique
+  createdAt       DateTime      @default(now())
+
+  @@map("payments")
+}
