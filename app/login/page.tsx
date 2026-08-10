@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
-export default function LoginPage() {
+function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,7 +17,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const res = await signIn('credentials', { email, password, redirect: false, callbackUrl: '/dashboard' });
+    const res = await signIn('credentials', { email, password, redirect: false, callbackUrl });
     setLoading(false);
     if (res?.error) setError('Invalid email or password.');
     else if (res?.url) window.location.href = res.url;
@@ -66,7 +70,7 @@ export default function LoginPage() {
 
           <button
             type="button"
-            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+            onClick={() => signIn('google', { callbackUrl })}
             className="mt-7 w-full h-[46px] flex items-center justify-center gap-2.5 bg-[#15171A] border border-border-strong rounded-control text-sm font-semibold transition-colors hover:bg-[#1B1E22] hover:border-[#33373E]"
           >
             <span
@@ -130,5 +134,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
