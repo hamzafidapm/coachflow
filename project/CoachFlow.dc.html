@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,0,0&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  html, body { margin:0; padding:0; background:#0A0B0D; }
+  * { box-sizing:border-box; }
+  a { color:#2FD8A6; text-decoration:none; }
+  a:hover { color:#5CEBC0; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-thumb { background:#24272C; border-radius:8px; border:3px solid #0A0B0D; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  input, button, textarea, select { font-family:inherit; }
+  @keyframes cfFade { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  @keyframes cfPop { from { opacity:0; transform:scale(.94); } to { opacity:1; transform:none; } }
+  @keyframes cfToast { from { opacity:0; transform:translateY(14px) scale(.97); } to { opacity:1; transform:none; } }
+  @keyframes cfDraw { from { stroke-dashoffset:1400; } to { stroke-dashoffset:0; } }
+  @keyframes cfRise { from { transform:scaleY(0); } to { transform:scaleY(1); } }
+  @keyframes cfShimmer { from { background-position:-420px 0; } to { background-position:420px 0; } }
+  @keyframes cfDrift { 0% { transform:translate(-4%,-2%) scale(1.05); } 50% { transform:translate(4%,3%) scale(1.15); } 100% { transform:translate(-4%,-2%) scale(1.05); } }
+  @keyframes cfPulse { 0%,100% { opacity:.55; } 50% { opacity:1; } }
+</style>
+</helmet>
+
+<div style="font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#F2F4F7;background:#0A0B0D;min-height:100vh;-webkit-font-smoothing:antialiased">
+
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+  <div style="display:grid;grid-template-columns:1.05fr 1fr;min-height:100vh">
+    <div style="position:relative;overflow:hidden;background:#0D0F12;border-right:1px solid #1C1F24">
+      <div style="position:absolute;inset:-20%;background:radial-gradient(42% 42% at 30% 35%, rgba(47,216,166,.30), transparent 70%),radial-gradient(40% 40% at 72% 68%, rgba(56,120,255,.22), transparent 72%);filter:blur(30px);animation:cfDrift 18s ease-in-out infinite"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,13,.15),rgba(10,11,13,.85))"></div>
+      <div style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:44px 52px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:30px;height:30px;border-radius:9px;background:#2FD8A6;display:flex;align-items:center;justify-content:center;color:#06251C;font-weight:800;font-size:15px">C</div>
+          <div style="font-weight:700;font-size:17px;letter-spacing:-.01em">CoachFlow</div>
+        </div>
+        <div style="max-width:420px">
+          <div style="font-size:38px;line-height:1.15;font-weight:700;letter-spacing:-.03em;text-wrap:pretty">The operating system for your coaching business.</div>
+          <div style="margin-top:16px;font-size:15px;line-height:1.6;color:#9AA1AB">Clients, cohorts, calendars and cash flow — one workspace, no spreadsheet archaeology.</div>
+        </div>
+        <div style="display:flex;gap:28px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#79808A">
+          <div><span style="color:#2FD8A6">12,400+</span> coaches</div>
+          <div><span style="color:#2FD8A6">$310M</span> processed</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;padding:48px">
+      <div style="width:100%;max-width:380px;animation:cfFade .5s cubic-bezier(.22,1,.36,1) both">
+        <div style="font-size:26px;font-weight:700;letter-spacing:-.02em">Welcome back</div>
+        <div style="margin-top:8px;font-size:14px;color:#8A9099">Sign in to your coach workspace.</div>
+        <button type="button" onClick="{{ signIn }}" style="margin-top:28px;width:100%;height:46px;display:flex;align-items:center;justify-content:center;gap:10px;background:#15171A;border:1px solid #24272C;border-radius:12px;color:#F2F4F7;font-size:14px;font-weight:600;cursor:pointer;transition:background .18s cubic-bezier(.4,0,.2,1),border-color .18s" style-hover="background:#1B1E22;border-color:#33373E">
+          <span style="width:16px;height:16px;border-radius:50%;background:conic-gradient(#EA4335 0 25%,#FBBC05 0 50%,#34A853 0 75%,#4285F4 0)"></span>
+          Continue with Google
+        </button>
+        <div style="display:flex;align-items:center;gap:12px;margin:22px 0">
+          <div style="flex:1;height:1px;background:#1E2126"></div>
+          <div style="font-size:11px;letter-spacing:.12em;color:#6C737C">OR</div>
+          <div style="flex:1;height:1px;background:#1E2126"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <label style="font-size:12px;font-weight:600;color:#9AA1AB">Email</label>
+            <input type="email" value="maya@studio.co" style="height:46px;padding:0 14px;background:#111316;border:1px solid #24272C;border-radius:12px;color:#F2F4F7;font-size:14px;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.14)">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <label style="font-size:12px;font-weight:600;color:#9AA1AB">Password</label>
+              <a href="#" style="font-size:12px;color:#8A9099">Forgot?</a>
+            </div>
+            <input type="password" value="passwordvalue" style="height:46px;padding:0 14px;background:#111316;border:1px solid #24272C;border-radius:12px;color:#F2F4F7;font-size:14px;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.14)">
+          </div>
+        </div>
+        <button type="button" onClick="{{ signIn }}" style="margin-top:24px;width:100%;height:46px;background:#2FD8A6;border:none;border-radius:12px;color:#06251C;font-size:14px;font-weight:700;cursor:pointer;transition:transform .18s cubic-bezier(.4,0,.2,1),background .18s" style-hover="background:#4BE6B8;transform:translateY(-1px)">Sign in</button>
+        <div style="margin-top:20px;font-size:13px;color:#79808A;text-align:center">New to CoachFlow? <a href="#">Create an account</a></div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;min-height:100vh">
+
+  <aside style="width:{{ sidebarWidth }};flex:0 0 auto;background:#0D0F12;border-right:1px solid #1B1E23;display:flex;flex-direction:column;padding:20px 14px;gap:24px;transition:width .28s cubic-bezier(.4,0,.2,1);position:sticky;top:0;height:100vh">
+    <div style="display:flex;align-items:center;gap:10px;padding:0 6px;height:34px">
+      <div style="width:30px;height:30px;flex:0 0 auto;border-radius:9px;background:#2FD8A6;display:flex;align-items:center;justify-content:center;color:#06251C;font-weight:800;font-size:15px">C</div>
+      <div style="display:{{ labelDisplay }};font-weight:700;font-size:16px;letter-spacing:-.01em;white-space:nowrap">CoachFlow</div>
+    </div>
+
+    <nav style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
+        <button type="button" onClick="{{ item.onClick }}" title="{{ item.label }}" style="display:flex;align-items:center;gap:12px;height:42px;padding:0 12px;border:none;border-radius:11px;cursor:pointer;background:{{ item.bg }};color:{{ item.color }};font-size:14px;font-weight:{{ item.weight }};text-align:left;white-space:nowrap;overflow:hidden;transition:background .2s cubic-bezier(.4,0,.2,1),color .2s" style-hover="background:#16191D;color:#F2F4F7">
+          <span style="font-family:'Material Symbols Rounded';font-size:21px;line-height:1;flex:0 0 auto;transition:transform .2s cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.12)">{{ item.icon }}</span>
+          <span style="display:{{ labelDisplay }}">{{ item.label }}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px">
+      <div style="display:{{ labelDisplay }};padding:14px;border-radius:14px;background:linear-gradient(160deg,rgba(47,216,166,.14),rgba(47,216,166,.03));border:1px solid rgba(47,216,166,.22)">
+        <div style="font-size:13px;font-weight:700">Pro trial · 6 days left</div>
+        <div style="margin-top:5px;font-size:12px;line-height:1.5;color:#9AA1AB">Unlock unlimited cohorts and custom branding.</div>
+        <button type="button" onClick="{{ upgrade }}" style="margin-top:12px;width:100%;height:34px;border:none;border-radius:9px;background:#2FD8A6;color:#06251C;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .18s" style-hover="background:#4BE6B8">Upgrade</button>
+      </div>
+      <button type="button" onClick="{{ toggleSidebar }}" style="display:flex;align-items:center;gap:12px;height:40px;padding:0 12px;border:none;border-radius:11px;background:transparent;color:#79808A;font-size:13px;cursor:pointer;transition:background .2s,color .2s" style-hover="background:#16191D;color:#F2F4F7">
+        <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1">{{ collapseIcon }}</span>
+        <span style="display:{{ labelDisplay }};white-space:nowrap">Collapse</span>
+      </button>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:18px;height:66px;padding:0 28px;background:rgba(10,11,13,.82);backdrop-filter:blur(14px);border-bottom:1px solid #1B1E23">
+      <button type="button" onClick="{{ toggleSidebar }}" style="width:36px;height:36px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;border:1px solid #24272C;border-radius:10px;background:#111316;color:#9AA1AB;cursor:pointer;transition:background .2s,color .2s" style-hover="background:#191C20;color:#F2F4F7">
+        <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1">menu</span>
+      </button>
+      <div style="display:flex;flex-direction:column;min-width:0">
+        <div style="font-size:15px;font-weight:700;letter-spacing:-.01em;white-space:nowrap">{{ screenTitle }}</div>
+        <div style="font-size:12px;color:#79808A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ screenSub }}</div>
+      </div>
+      <div style="flex:1"></div>
+      <div style="position:relative;display:flex;align-items:center;width:280px;max-width:34vw">
+        <span style="position:absolute;left:12px;font-family:'Material Symbols Rounded';font-size:18px;color:#6C737C;pointer-events:none">search</span>
+        <input type="text" placeholder="Search clients, courses, invoices…" style="width:100%;height:38px;padding:0 12px 0 38px;background:#111316;border:1px solid #24272C;border-radius:11px;color:#F2F4F7;font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.12)">
+      </div>
+      <button type="button" onClick="{{ notify }}" style="position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid #24272C;border-radius:11px;background:#111316;color:#9AA1AB;cursor:pointer;transition:background .2s,color .2s" style-hover="background:#191C20;color:#F2F4F7">
+        <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1">notifications</span>
+        <span style="position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;background:#2FD8A6;box-shadow:0 0 0 2px #111316"></span>
+      </button>
+      <div style="position:relative">
+        <button type="button" onClick="{{ toggleProfile }}" style="display:flex;align-items:center;gap:9px;height:38px;padding:0 9px 0 4px;border:1px solid #24272C;border-radius:11px;background:#111316;color:#F2F4F7;cursor:pointer;transition:background .2s" style-hover="background:#191C20">
+          <span style="width:28px;height:28px;border-radius:8px;background:rgba(47,216,166,.16);color:#2FD8A6;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">MC</span>
+          <span style="font-family:'Material Symbols Rounded';font-size:18px;color:#79808A">expand_more</span>
+        </button>
+        <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;right:0;top:46px;width:212px;padding:6px;background:#131518;border:1px solid #24272C;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.55);animation:cfPop .16s cubic-bezier(.4,0,.2,1) both">
+            <div style="padding:10px 10px 12px;border-bottom:1px solid #1E2126">
+              <div style="font-size:13px;font-weight:700">Maya Chen</div>
+              <div style="font-size:12px;color:#79808A">maya@studio.co</div>
+            </div>
+            <sc-for list="{{ profileMenu }}" as="m" hint-placeholder-count="3">
+              <button type="button" onClick="{{ m.onClick }}" style="display:flex;align-items:center;gap:10px;width:100%;height:36px;padding:0 10px;margin-top:2px;border:none;border-radius:9px;background:transparent;color:#C6CBD2;font-size:13px;text-align:left;cursor:pointer;transition:background .18s,color .18s" style-hover="background:#1B1E22;color:#F2F4F7">
+                <span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">{{ m.icon }}</span>{{ m.label }}
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </header>
+
+    <div key="{{ screenKey }}" style="flex:1;padding:28px;animation:cfFade .34s cubic-bezier(.22,1,.36,1) both">
+      <div style="max-width:1280px;margin:0 auto">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="padding:20px;background:#111316;border:1px solid #1F2227;border-radius:16px;transition:border-color .22s cubic-bezier(.4,0,.2,1),transform .22s" style-hover="border-color:#2E3239;transform:translateY(-2px)">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="font-size:12.5px;color:#8A9099;font-weight:600">{{ s.label }}</div>
+                <span style="font-family:'Material Symbols Rounded';font-size:19px;color:#5E656E">{{ s.icon }}</span>
+              </div>
+              <div style="margin-top:14px;font-size:30px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums">{{ s.value }}</div>
+              <div style="margin-top:10px;display:flex;align-items:center;gap:6px;font-size:12px;color:{{ s.trendColor }}">
+                <span style="font-family:'Material Symbols Rounded';font-size:15px">{{ s.trendIcon }}</span>
+                <span style="font-weight:700">{{ s.delta }}</span>
+                <span style="color:#6C737C">vs last month</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:16px;display:grid;grid-template-columns:1.6fr 1fr;gap:16px;align-items:start">
+          <div style="padding:22px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+              <div>
+                <div style="font-size:15px;font-weight:700">Revenue trend</div>
+                <div style="margin-top:4px;font-size:12.5px;color:#79808A">Last 12 months · net of refunds</div>
+              </div>
+              <div style="display:flex;gap:4px;padding:4px;background:#0D0F12;border:1px solid #1F2227;border-radius:10px">
+                <sc-for list="{{ rangeTabs }}" as="t" hint-placeholder-count="3">
+                  <button type="button" onClick="{{ t.onClick }}" style="height:28px;padding:0 12px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:{{ t.bg }};color:{{ t.color }};transition:background .18s,color .18s">{{ t.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="margin-top:18px;position:relative">
+              <svg viewBox="0 0 720 240" preserveAspectRatio="none" style="width:100%;height:240px;display:block">
+                <defs>
+                  <linearGradient id="cfArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#2FD8A6" stop-opacity="0.30"></stop>
+                    <stop offset="100%" stop-color="#2FD8A6" stop-opacity="0"></stop>
+                  </linearGradient>
+                </defs>
+                <sc-for list="{{ gridLines }}" as="g" hint-placeholder-count="4">
+                  <line x1="0" y1="{{ g.y }}" x2="720" y2="{{ g.y }}" stroke="#1C1F24" stroke-width="1"></line>
+                </sc-for>
+                <path d="{{ areaPath }}" fill="url(#cfArea)" style="animation:cfFade .8s cubic-bezier(.22,1,.36,1) both"></path>
+                <path d="{{ linePath }}" fill="none" stroke="#2FD8A6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:1400;animation:cfDraw 1.3s cubic-bezier(.4,0,.2,1) both"></path>
+                <sc-for list="{{ chartDots }}" as="d" hint-placeholder-count="12">
+                  <circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ d.r }}" fill="#0A0B0D" stroke="#2FD8A6" stroke-width="2.5"></circle>
+                </sc-for>
+              </svg>
+              <div style="display:flex;justify-content:space-between;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6C737C">
+                <sc-for list="{{ months }}" as="m" hint-placeholder-count="12">
+                  <span>{{ m }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="padding:20px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+              <div style="font-size:14px;font-weight:700">Quick actions</div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ quickActions }}" as="q" hint-placeholder-count="3">
+                  <button type="button" onClick="{{ q.onClick }}" style="display:flex;align-items:center;gap:11px;height:44px;padding:0 13px;border:1px solid #24272C;border-radius:12px;background:#15171A;color:#E6E9ED;font-size:13.5px;font-weight:600;text-align:left;cursor:pointer;transition:background .2s cubic-bezier(.4,0,.2,1),border-color .2s,transform .2s" style-hover="background:#1B1E22;border-color:#33373E;transform:translateX(2px)">
+                    <span style="font-family:'Material Symbols Rounded';font-size:19px;color:#2FD8A6">{{ q.icon }}</span>{{ q.label }}
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="padding:20px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="font-size:14px;font-weight:700">Recent activity</div>
+                <a href="#">View all</a>
+              </div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:2px">
+                <sc-for list="{{ activity }}" as="a" hint-placeholder-count="5">
+                  <div style="display:flex;gap:12px;padding:10px 8px;border-radius:10px;transition:background .2s" style-hover="background:#15181B">
+                    <span style="width:30px;height:30px;flex:0 0 auto;border-radius:9px;display:flex;align-items:center;justify-content:center;background:{{ a.tint }};color:{{ a.color }};font-family:'Material Symbols Rounded';font-size:17px">{{ a.icon }}</span>
+                    <div style="min-width:0">
+                      <div style="font-size:13px;line-height:1.45;color:#DDE1E6">{{ a.text }}</div>
+                      <div style="margin-top:3px;font-size:11.5px;color:#6C737C">{{ a.time }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isClients }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+          <div style="position:relative;display:flex;align-items:center;flex:1;min-width:220px;max-width:340px">
+            <span style="position:absolute;left:12px;font-family:'Material Symbols Rounded';font-size:18px;color:#6C737C">search</span>
+            <input type="text" placeholder="Search clients" value="{{ query }}" onChange="{{ onQuery }}" style="width:100%;height:40px;padding:0 12px 0 38px;background:#111316;border:1px solid #24272C;border-radius:11px;color:#F2F4F7;font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.12)">
+          </div>
+          <div style="display:flex;gap:4px;padding:4px;background:#0D0F12;border:1px solid #1F2227;border-radius:11px">
+            <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+              <button type="button" onClick="{{ f.onClick }}" style="height:30px;padding:0 13px;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;background:{{ f.bg }};color:{{ f.color }};transition:background .18s,color .18s">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <div style="flex:1"></div>
+          <button type="button" onClick="{{ openAddClient }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13.5px;font-weight:700;cursor:pointer;transition:background .18s,transform .18s" style-hover="background:#4BE6B8;transform:translateY(-1px)">
+            <span style="font-family:'Material Symbols Rounded';font-size:19px">add</span>Add client
+          </button>
+        </div>
+
+        <div style="margin-top:16px;display:grid;grid-template-columns:{{ crmColumns }};gap:16px;align-items:start">
+          <div style="background:#111316;border:1px solid #1F2227;border-radius:16px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:2.1fr 1fr 1.1fr 1fr 40px;gap:12px;padding:0 18px;height:46px;align-items:center;border-bottom:1px solid #1E2126;background:#0F1114">
+              <sc-for list="{{ columns }}" as="c" hint-placeholder-count="5">
+                <button type="button" onClick="{{ c.onClick }}" style="display:flex;align-items:center;gap:5px;border:none;background:transparent;padding:0;color:{{ c.color }};font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;justify-content:{{ c.align }};transition:color .18s" style-hover="color:#F2F4F7">
+                  {{ c.label }}<span style="font-family:'Material Symbols Rounded';font-size:14px;opacity:{{ c.arrowOpacity }}">{{ c.arrow }}</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:6px 0">
+                <sc-for list="{{ skeletons }}" as="s" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:2.1fr 1fr 1.1fr 1fr 40px;gap:12px;align-items:center;padding:0 18px;height:60px">
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(90deg,#171A1E 25%,#20242A 50%,#171A1E 75%);background-size:420px 100%;animation:cfShimmer 1.3s linear infinite"></div>
+                      <div style="height:11px;width:{{ s.w }};border-radius:6px;background:linear-gradient(90deg,#171A1E 25%,#20242A 50%,#171A1E 75%);background-size:420px 100%;animation:cfShimmer 1.3s linear infinite"></div>
+                    </div>
+                    <div style="height:11px;width:64px;border-radius:6px;background:linear-gradient(90deg,#171A1E 25%,#20242A 50%,#171A1E 75%);background-size:420px 100%;animation:cfShimmer 1.3s linear infinite"></div>
+                    <div style="height:11px;width:88px;border-radius:6px;background:linear-gradient(90deg,#171A1E 25%,#20242A 50%,#171A1E 75%);background-size:420px 100%;animation:cfShimmer 1.3s linear infinite"></div>
+                    <div style="height:11px;width:70px;border-radius:6px;background:linear-gradient(90deg,#171A1E 25%,#20242A 50%,#171A1E 75%);background-size:420px 100%;animation:cfShimmer 1.3s linear infinite"></div>
+                    <div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showRows }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <sc-for list="{{ visibleClients }}" as="c" hint-placeholder-count="8">
+                  <div onClick="{{ c.onOpen }}" style="display:grid;grid-template-columns:2.1fr 1fr 1.1fr 1fr 40px;gap:12px;align-items:center;padding:0 18px;height:62px;border-bottom:1px solid #191C20;cursor:pointer;background:{{ c.rowBg }};transition:background .18s cubic-bezier(.4,0,.2,1)" style-hover="background:#16191D">
+                    <div style="display:flex;align-items:center;gap:12px;min-width:0">
+                      <span style="width:34px;height:34px;flex:0 0 auto;border-radius:10px;display:flex;align-items:center;justify-content:center;background:{{ c.tint }};color:{{ c.ink }};font-size:12.5px;font-weight:700">{{ c.initials }}</span>
+                      <div style="min-width:0">
+                        <div style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.name }}</div>
+                        <div style="font-size:11.5px;color:#6C737C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.email }}</div>
+                      </div>
+                    </div>
+                    <div>
+                      <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ c.statusBg }};color:{{ c.statusColor }}">{{ c.status }}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:9px">
+                      <div style="flex:1;max-width:88px;height:5px;border-radius:4px;background:#1E2126;overflow:hidden">
+                        <div style="width:{{ c.progressW }};height:100%;border-radius:4px;background:#2FD8A6"></div>
+                      </div>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#9AA1AB">{{ c.progress }}%</span>
+                    </div>
+                    <div style="font-size:12.5px;color:#9AA1AB">{{ c.lastActive }}</div>
+                    <div style="display:flex;justify-content:flex-end;color:#5E656E;font-family:'Material Symbols Rounded';font-size:19px">chevron_right</div>
+                  </div>
+                </sc-for>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px">
+                  <div style="font-size:12.5px;color:#79808A">{{ pageLabel }}</div>
+                  <div style="display:flex;gap:8px">
+                    <button type="button" onClick="{{ prevPage }}" style="height:32px;padding:0 12px;border:1px solid #24272C;border-radius:9px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Previous</button>
+                    <button type="button" onClick="{{ nextPage }}" style="height:32px;padding:0 12px;border:1px solid #24272C;border-radius:9px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Next</button>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ clientsEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:72px 24px;text-align:center">
+                <div style="width:56px;height:56px;border-radius:18px;background:#15181C;border:1px solid #24272C;display:flex;align-items:center;justify-content:center;color:#5E656E;font-family:'Material Symbols Rounded';font-size:26px">group_off</div>
+                <div>
+                  <div style="font-size:15px;font-weight:700">No clients here yet</div>
+                  <div style="margin-top:6px;font-size:13px;color:#79808A;max-width:320px;line-height:1.55">Nobody matches this filter. Invite your first client and their progress will show up here.</div>
+                </div>
+                <button type="button" onClick="{{ openAddClient }}" style="height:38px;padding:0 16px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s" style-hover="background:#4BE6B8">Invite a client</button>
+              </div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ hasSelectedClient }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#111316;border:1px solid #1F2227;border-radius:16px;overflow:hidden;animation:cfFade .28s cubic-bezier(.22,1,.36,1) both;position:sticky;top:94px">
+              <div style="padding:20px;border-bottom:1px solid #1E2126">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <span style="width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:{{ detail.tint }};color:{{ detail.ink }};font-size:15px;font-weight:700">{{ detail.initials }}</span>
+                    <div>
+                      <div style="font-size:15px;font-weight:700">{{ detail.name }}</div>
+                      <div style="font-size:12px;color:#79808A">{{ detail.email }}</div>
+                    </div>
+                  </div>
+                  <button type="button" onClick="{{ closeDetail }}" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:none;border-radius:9px;background:#191C20;color:#8A9099;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px;transition:background .18s" style-hover="background:#22262B">close</button>
+                </div>
+                <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                  <div style="padding:12px;border-radius:12px;background:#0F1114;border:1px solid #1E2126">
+                    <div style="font-size:11.5px;color:#79808A">Program progress</div>
+                    <div style="margin-top:6px;font-size:19px;font-weight:700">{{ detail.progress }}%</div>
+                  </div>
+                  <div style="padding:12px;border-radius:12px;background:#0F1114;border:1px solid #1E2126">
+                    <div style="font-size:11.5px;color:#79808A">Lifetime value</div>
+                    <div style="margin-top:6px;font-size:19px;font-weight:700">{{ detail.ltv }}</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:2px;padding:8px 12px;border-bottom:1px solid #1E2126">
+                <sc-for list="{{ detailTabs }}" as="t" hint-placeholder-count="3">
+                  <button type="button" onClick="{{ t.onClick }}" style="height:30px;padding:0 12px;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;background:{{ t.bg }};color:{{ t.color }};transition:background .18s,color .18s">{{ t.label }}</button>
+                </sc-for>
+              </div>
+              <div style="padding:16px 20px 20px;display:flex;flex-direction:column;gap:12px;max-height:420px;overflow:auto">
+                <sc-for list="{{ detailRows }}" as="r" hint-placeholder-count="4">
+                  <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:#0F1114;border:1px solid #1E2126">
+                    <span style="width:28px;height:28px;flex:0 0 auto;border-radius:9px;background:rgba(47,216,166,.12);color:#2FD8A6;display:flex;align-items:center;justify-content:center;font-family:'Material Symbols Rounded';font-size:16px">{{ r.icon }}</span>
+                    <div style="min-width:0;flex:1">
+                      <div style="display:flex;justify-content:space-between;gap:10px">
+                        <div style="font-size:13px;font-weight:600">{{ r.title }}</div>
+                        <div style="font-size:11.5px;color:#6C737C;white-space:nowrap">{{ r.meta }}</div>
+                      </div>
+                      <div style="margin-top:4px;font-size:12.5px;line-height:1.5;color:#9AA1AB">{{ r.body }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+                <button type="button" onClick="{{ openBooking }}" style="height:40px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s" style-hover="background:#4BE6B8">Book a session</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCoursesList }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="font-size:13px;color:#79808A">5 published · 1 draft · 2,600 total enrollments</div>
+          <button type="button" onClick="{{ newCourse }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13.5px;font-weight:700;cursor:pointer;transition:background .18s,transform .18s" style-hover="background:#4BE6B8;transform:translateY(-1px)">
+            <span style="font-family:'Material Symbols Rounded';font-size:19px">add</span>New course
+          </button>
+        </div>
+        <div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
+          <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
+            <div onClick="{{ c.onOpen }}" style="background:#111316;border:1px solid #1F2227;border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color .22s cubic-bezier(.4,0,.2,1),transform .22s" style-hover="border-color:#33373E;transform:translateY(-3px)">
+              <div style="height:132px;background-color:{{ c.tint }};background-image:{{ c.coverImg }},{{ c.coverStripes }};background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:space-between;padding:12px">
+                <span style="display:{{ c.labelDisplay }};font-family:'JetBrains Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.62)">cover · {{ c.shot }}</span>
+                <span style="height:22px;padding:0 8px;border-radius:6px;background:rgba(10,11,13,.66);color:#DDE1E6;font-size:11px;font-weight:700;display:flex;align-items:center">{{ c.state }}</span>
+              </div>
+              <div style="padding:16px">
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:6px;background:rgba(47,216,166,.11);color:#2FD8A6;font-size:11px;font-weight:700;letter-spacing:.02em">{{ c.category }}</span>
+                <div style="margin-top:10px;font-size:14.5px;font-weight:700;letter-spacing:-.01em">{{ c.title }}</div>
+                <div style="margin-top:6px;font-size:12.5px;line-height:1.5;color:#79808A">{{ c.desc }}</div>
+                <div style="margin-top:14px;display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#9AA1AB">
+                  <span>{{ c.metaLabel }}</span>
+                  <span>{{ c.students }} enrolled</span>
+                </div>
+                <div style="margin-top:12px;padding-top:12px;border-top:1px solid #1E2126;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#2FD8A6;white-space:nowrap">
+                  <span style="font-family:'Material Symbols Rounded';font-size:16px">play_circle</span>{{ c.playLabel }}
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPlayer }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button type="button" onClick="{{ backToCourses }}" style="display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid #24272C;border-radius:10px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;white-space:nowrap;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">
+              <span style="font-family:'Material Symbols Rounded';font-size:17px">arrow_back</span>All courses
+            </button>
+            <div style="flex:1"></div>
+            <button type="button" onClick="{{ openBuilderFromPlayer }}" style="height:34px;padding:0 13px;border:1px solid #24272C;border-radius:10px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;white-space:nowrap;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Edit course</button>
+          </div>
+
+          <div style="margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start">
+            <div>
+              <div style="position:relative;width:100%;padding-top:56.25%;background:#000;border:1px solid #1F2227;border-radius:16px;overflow:hidden">
+                <iframe src="{{ embedSrc }}" title="{{ playerTitle }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
+              </div>
+              <div style="margin-top:18px;padding:22px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:6px;background:rgba(47,216,166,.11);color:#2FD8A6;font-size:11px;font-weight:700">{{ playerCategory }}</span>
+                <div style="margin-top:10px;font-size:20px;font-weight:700;letter-spacing:-.02em">{{ playerTitle }}</div>
+                <div style="margin-top:8px;font-size:13.5px;line-height:1.6;color:#9AA1AB;max-width:640px;text-wrap:pretty">{{ playerDesc }}</div>
+                <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:18px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#79808A">
+                  <span>{{ playerModules }}</span>
+                  <span>{{ playerStudents }} enrolled</span>
+                  <span>{{ playerSource }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#111316;border:1px solid #1F2227;border-radius:16px;overflow:hidden;position:sticky;top:94px">
+              <div style="padding:18px 18px 14px;border-bottom:1px solid #1E2126">
+                <div style="font-size:14px;font-weight:700">{{ playlistTitle }}</div>
+                <div style="margin-top:4px;font-size:12px;color:#79808A">{{ playlistMeta }}</div>
+              </div>
+              <div style="max-height:520px;overflow:auto;padding:8px">
+                <sc-for list="{{ playlist }}" as="p" hint-placeholder-count="6">
+                  <div onClick="{{ p.onClick }}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;cursor:pointer;background:{{ p.bg }};transition:background .18s cubic-bezier(.4,0,.2,1)" style-hover="background:#16191D">
+                    <span style="font-family:'Material Symbols Rounded';font-size:19px;color:{{ p.iconColor }}">{{ p.icon }}</span>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:13px;font-weight:600;color:{{ p.color }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.title }}</div>
+                      <div style="margin-top:3px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6C737C">{{ p.meta }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBuilder }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button type="button" onClick="{{ backToCourses }}" style="display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid #24272C;border-radius:10px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;white-space:nowrap;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">
+            <span style="font-family:'Material Symbols Rounded';font-size:17px">arrow_back</span>All courses
+          </button>
+          <div style="flex:1"></div>
+          <button type="button" onClick="{{ saveDraft }}" style="height:38px;padding:0 14px;border:1px solid #24272C;border-radius:11px;background:#15171A;color:#C6CBD2;font-size:13px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Save draft</button>
+          <button type="button" onClick="{{ publish }}" style="height:38px;padding:0 16px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s" style-hover="background:#4BE6B8">Publish</button>
+        </div>
+
+        <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1.25fr;gap:16px;align-items:start">
+          <div style="padding:20px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+            <div style="font-size:14px;font-weight:700">Module builder</div>
+            <div style="margin-top:5px;font-size:12.5px;color:#79808A">Drag lessons to reorder. Click one to edit.</div>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ lessons }}" as="l" hint-placeholder-count="5">
+                <div draggable="true" onDragStart="{{ l.onDragStart }}" onDragOver="{{ l.onDragOver }}" onDrop="{{ l.onDrop }}" onDragEnd="{{ l.onDragEnd }}" onClick="{{ l.onSelect }}" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid {{ l.border }};border-radius:12px;background:{{ l.bg }};cursor:grab;opacity:{{ l.opacity }};transition:border-color .18s cubic-bezier(.4,0,.2,1),background .18s,transform .18s" style-hover="border-color:#33373E;transform:translateX(2px)">
+                  <span style="font-family:'Material Symbols Rounded';font-size:19px;color:#5E656E">drag_indicator</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#2FD8A6;width:26px">{{ l.num }}</span>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.title }}</div>
+                    <div style="margin-top:3px;font-size:11.5px;color:#6C737C">{{ l.meta }}</div>
+                  </div>
+                  <span style="font-family:'Material Symbols Rounded';font-size:18px;color:{{ l.iconColor }}">{{ l.icon }}</span>
+                </div>
+              </sc-for>
+              <button type="button" onClick="{{ addLesson }}" style="display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border:1px dashed #2C3037;border-radius:12px;background:transparent;color:#8A9099;font-size:13px;font-weight:600;cursor:pointer;transition:border-color .18s,color .18s" style-hover="border-color:#2FD8A6;color:#2FD8A6">
+                <span style="font-family:'Material Symbols Rounded';font-size:18px">add</span>Add lesson
+              </button>
+            </div>
+          </div>
+
+          <div style="padding:22px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+            <div style="font-size:14px;font-weight:700">Lesson editor</div>
+            <div style="margin-top:16px;height:180px;border:1px dashed #2C3037;border-radius:14px;background:repeating-linear-gradient(135deg,#0F1114 0 10px,#121417 10px 20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:border-color .2s" style-hover="border-color:#2FD8A6">
+              <span style="font-family:'Material Symbols Rounded';font-size:26px;color:#2FD8A6">cloud_upload</span>
+              <div style="font-size:13px;font-weight:600">Drop lesson video here</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6C737C">mp4 · up to 4GB · 1080p recommended</div>
+            </div>
+            <div style="margin-top:18px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <label style="font-size:12px;font-weight:600;color:#9AA1AB">Lesson title</label>
+                <input type="text" value="{{ lessonTitle }}" onChange="{{ onLessonTitle }}" style="height:42px;padding:0 13px;background:#0F1114;border:1px solid #24272C;border-radius:11px;color:#F2F4F7;font-size:13.5px;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.12)">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <label style="font-size:12px;font-weight:600;color:#9AA1AB">Description</label>
+                <textarea rows="4" style="padding:12px 13px;background:#0F1114;border:1px solid #24272C;border-radius:11px;color:#F2F4F7;font-size:13.5px;line-height:1.55;resize:vertical;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.12)">A 12-minute walkthrough of the weekly review ritual, plus the exact prompts to send clients the night before.</textarea>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <label style="font-size:12px;font-weight:600;color:#9AA1AB">Downloadable resources</label>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{ resources }}" as="r" hint-placeholder-count="2">
+                    <span style="display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 11px;border:1px solid #24272C;border-radius:9px;background:#15171A;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#C6CBD2">
+                      <span style="font-family:'Material Symbols Rounded';font-size:15px;color:#2FD8A6">description</span>{{ r }}
+                    </span>
+                  </sc-for>
+                  <button type="button" onClick="{{ attach }}" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border:1px dashed #2C3037;border-radius:9px;background:transparent;color:#8A9099;font-size:12px;font-weight:600;cursor:pointer;transition:color .18s,border-color .18s" style-hover="color:#2FD8A6;border-color:#2FD8A6">
+                    <span style="font-family:'Material Symbols Rounded';font-size:16px">attach_file</span>Attach
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+          <div style="display:flex;gap:4px;padding:4px;background:#0D0F12;border:1px solid #1F2227;border-radius:11px">
+            <sc-for list="{{ calTabs }}" as="t" hint-placeholder-count="2">
+              <button type="button" onClick="{{ t.onClick }}" style="height:30px;padding:0 14px;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;background:{{ t.bg }};color:{{ t.color }};transition:background .18s,color .18s">{{ t.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:13.5px;font-weight:600;color:#C6CBD2">{{ calRange }}</div>
+          <div style="flex:1"></div>
+          <button type="button" onClick="{{ openBooking }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13.5px;font-weight:700;cursor:pointer;transition:background .18s,transform .18s" style-hover="background:#4BE6B8;transform:translateY(-1px)">
+            <span style="font-family:'Material Symbols Rounded';font-size:19px">add</span>New booking
+          </button>
+        </div>
+
+        <div style="margin-top:16px;display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start">
+          <div style="padding:18px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+            <sc-if value="{{ isWeekView }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <div style="display:grid;grid-template-columns:52px repeat(7,1fr);gap:6px;padding-bottom:10px;border-bottom:1px solid #1E2126">
+                  <div></div>
+                  <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+                    <div style="text-align:center">
+                      <div style="font-size:11px;letter-spacing:.08em;color:#6C737C">{{ d.dow }}</div>
+                      <div style="margin-top:4px;font-size:15px;font-weight:700;color:{{ d.color }}">{{ d.num }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="position:relative;display:grid;grid-template-columns:52px repeat(7,1fr);gap:6px;margin-top:10px">
+                  <div style="display:flex;flex-direction:column">
+                    <sc-for list="{{ hours }}" as="h" hint-placeholder-count="9">
+                      <div style="height:56px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5E656E">{{ h }}</div>
+                    </sc-for>
+                  </div>
+                  <sc-for list="{{ weekColumns }}" as="col" hint-placeholder-count="7">
+                    <div style="position:relative;border-left:1px solid #191C20">
+                      <sc-for list="{{ hours }}" as="h" hint-placeholder-count="9">
+                        <div style="height:56px;border-bottom:1px solid #17191D"></div>
+                      </sc-for>
+                      <sc-for list="{{ col.events }}" as="e" hint-placeholder-count="2">
+                        <div onClick="{{ e.onClick }}" style="position:absolute;left:3px;right:3px;top:{{ e.top }};height:{{ e.height }};padding:8px 9px;border-radius:10px;border-left:3px solid {{ e.accent }};background:{{ e.bg }};cursor:pointer;overflow:hidden;transition:transform .18s cubic-bezier(.4,0,.2,1),filter .18s" style-hover="transform:scale(1.02);filter:brightness(1.15)">
+                          <div style="font-size:11.5px;font-weight:700;color:#F2F4F7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ e.title }}</div>
+                          <div style="margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA1AB">{{ e.time }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isMonthView }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding-bottom:10px">
+                  <sc-for list="{{ dowLabels }}" as="d" hint-placeholder-count="7">
+                    <div style="text-align:center;font-size:11px;letter-spacing:.08em;color:#6C737C">{{ d }}</div>
+                  </sc-for>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+                  <sc-for list="{{ monthCells }}" as="m" hint-placeholder-count="35">
+                    <div style="min-height:92px;padding:8px;border-radius:10px;border:1px solid #191C20;background:{{ m.bg }}">
+                      <div style="font-size:12px;font-weight:600;color:{{ m.color }}">{{ m.num }}</div>
+                      <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px">
+                        <sc-for list="{{ m.events }}" as="e" hint-placeholder-count="1">
+                          <div onClick="{{ e.onClick }}" style="padding:4px 6px;border-radius:6px;background:{{ e.bg }};font-size:10.5px;font-weight:600;color:#DDE1E6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:filter .18s" style-hover="filter:brightness(1.2)">{{ e.title }}</div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="padding:20px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+              <div style="font-size:14px;font-weight:700">Availability</div>
+              <div style="margin-top:5px;font-size:12.5px;color:#79808A">Open slots clients can book.</div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ availability }}" as="a" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:11px;background:#0F1114;border:1px solid #1E2126">
+                    <div style="font-size:13px;font-weight:600;width:44px">{{ a.day }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:{{ a.slotColor }}">{{ a.slot }}</div>
+                    <button type="button" onClick="{{ a.onToggle }}" style="width:38px;height:22px;flex:0 0 auto;border:none;border-radius:12px;background:{{ a.trackBg }};position:relative;cursor:pointer;transition:background .22s cubic-bezier(.4,0,.2,1)">
+                      <span style="position:absolute;top:3px;left:{{ a.knobLeft }};width:16px;height:16px;border-radius:50%;background:{{ a.knobBg }};transition:left .22s cubic-bezier(.4,0,.2,1)"></span>
+                    </button>
+                  </div>
+                </sc-for>
+              </div>
+              <button type="button" onClick="{{ copyLink }}" style="margin-top:14px;width:100%;height:38px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #24272C;border-radius:11px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">
+                <span style="font-family:'Material Symbols Rounded';font-size:17px">link</span>Copy booking link
+              </button>
+            </div>
+            <div style="padding:20px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+              <div style="font-size:14px;font-weight:700">Buffer &amp; limits</div>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px">
+                <sc-for list="{{ limits }}" as="l" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <div style="font-size:12.5px;color:#9AA1AB">{{ l.label }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F2F4F7">{{ l.value }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPayments }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start">
+          <div style="padding:22px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+              <div>
+                <div style="font-size:12.5px;color:#8A9099;font-weight:600">Gross volume</div>
+                <div style="margin-top:8px;font-size:32px;font-weight:700;letter-spacing:-.03em">{{ grossVolume }}</div>
+                <div style="margin-top:8px;display:flex;align-items:center;gap:6px;font-size:12.5px;color:#2FD8A6">
+                  <span style="font-family:'Material Symbols Rounded';font-size:15px">arrow_upward</span><span style="font-weight:700">+14.2%</span><span style="color:#6C737C">vs prior period</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;padding:4px;background:#0D0F12;border:1px solid #1F2227;border-radius:10px">
+                <sc-for list="{{ billingTabs }}" as="t" hint-placeholder-count="2">
+                  <button type="button" onClick="{{ t.onClick }}" style="height:28px;padding:0 12px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:{{ t.bg }};color:{{ t.color }};transition:background .18s,color .18s">{{ t.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="margin-top:22px;display:flex;align-items:flex-end;gap:10px;height:170px">
+              <sc-for list="{{ bars }}" as="b" hint-placeholder-count="12">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+                  <div style="width:100%;height:{{ b.h }};border-radius:6px 6px 3px 3px;background:{{ b.bg }};transform-origin:bottom;animation:cfRise .6s cubic-bezier(.22,1,.36,1) both;animation-delay:{{ b.delay }};transition:background .18s" style-hover="background:#2FD8A6"></div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6C737C">{{ b.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:20px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:14px;font-weight:700">Plans</div>
+              <button type="button" onClick="{{ editPlans }}" style="height:30px;padding:0 11px;border:1px solid #24272C;border-radius:9px;background:#15171A;color:#C6CBD2;font-size:12px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Edit tiers</button>
+            </div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+                <div style="padding:14px;border-radius:12px;background:#0F1114;border:1px solid {{ p.border }};transition:border-color .2s" style-hover="border-color:#33373E">
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <div style="font-size:13.5px;font-weight:700">{{ p.name }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#2FD8A6">{{ p.price }}</div>
+                  </div>
+                  <div style="margin-top:6px;font-size:12px;color:#79808A">{{ p.detail }}</div>
+                  <div style="margin-top:10px;height:5px;border-radius:4px;background:#1E2126;overflow:hidden">
+                    <div style="width:{{ p.share }};height:100%;background:#2FD8A6"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;background:#111316;border:1px solid #1F2227;border-radius:16px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #1E2126">
+            <div style="font-size:14px;font-weight:700">Transactions</div>
+            <button type="button" onClick="{{ exportCsv }}" style="display:flex;align-items:center;gap:7px;height:32px;padding:0 12px;border:1px solid #24272C;border-radius:9px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">
+              <span style="font-family:'Material Symbols Rounded';font-size:16px">download</span>Export CSV
+            </button>
+          </div>
+          <div style="display:grid;grid-template-columns:1.6fr 1.2fr .9fr 1fr .9fr;gap:12px;padding:0 20px;height:42px;align-items:center;background:#0F1114;border-bottom:1px solid #1E2126;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#79808A">
+            <div>Client</div><div>Plan</div><div>Amount</div><div>Date</div><div>Status</div>
+          </div>
+          <sc-for list="{{ transactions }}" as="t" hint-placeholder-count="8">
+            <div style="display:grid;grid-template-columns:1.6fr 1.2fr .9fr 1fr .9fr;gap:12px;padding:0 20px;height:56px;align-items:center;border-bottom:1px solid #191C20;transition:background .18s" style-hover="background:#16191D">
+              <div style="display:flex;align-items:center;gap:11px;min-width:0">
+                <span style="width:30px;height:30px;flex:0 0 auto;border-radius:9px;display:flex;align-items:center;justify-content:center;background:{{ t.tint }};color:{{ t.ink }};font-size:11.5px;font-weight:700">{{ t.initials }}</span>
+                <span style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.name }}</span>
+              </div>
+              <div style="font-size:13px;color:#9AA1AB">{{ t.plan }}</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:13px">{{ t.amount }}</div>
+              <div style="font-size:12.5px;color:#9AA1AB">{{ t.date }}</div>
+              <div><span style="display:inline-flex;height:24px;align-items:center;padding:0 10px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ t.statusBg }};color:{{ t.statusColor }}">{{ t.status }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:212px 1fr;gap:16px;align-items:start">
+          <div style="padding:8px;background:#111316;border:1px solid #1F2227;border-radius:16px;display:flex;flex-direction:column;gap:2px">
+            <sc-for list="{{ settingsTabs }}" as="t" hint-placeholder-count="4">
+              <button type="button" onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border:none;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;text-align:left;background:{{ t.bg }};color:{{ t.color }};transition:background .18s,color .18s" style-hover="background:#16191D;color:#F2F4F7">
+                <span style="font-family:'Material Symbols Rounded';font-size:18px">{{ t.icon }}</span>{{ t.label }}
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="padding:24px;background:#111316;border:1px solid #1F2227;border-radius:16px">
+            <sc-if value="{{ isProfileTab }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <div style="font-size:15px;font-weight:700">Profile</div>
+                <div style="margin-top:6px;font-size:12.5px;color:#79808A">How you appear to clients across bookings and course pages.</div>
+                <div style="margin-top:22px;display:flex;align-items:center;gap:16px">
+                  <div style="width:66px;height:66px;border-radius:20px;background:rgba(47,216,166,.16);color:#2FD8A6;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700">MC</div>
+                  <div style="display:flex;gap:8px">
+                    <button type="button" onClick="{{ uploadPhoto }}" style="height:34px;padding:0 13px;border:1px solid #24272C;border-radius:10px;background:#15171A;color:#C6CBD2;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Upload photo</button>
+                    <button type="button" onClick="{{ removePhoto }}" style="height:34px;padding:0 13px;border:none;border-radius:10px;background:transparent;color:#79808A;font-size:12.5px;font-weight:600;cursor:pointer;transition:color .18s" style-hover="color:#F2F4F7">Remove</button>
+                  </div>
+                </div>
+                <div style="margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                  <sc-for list="{{ profileFields }}" as="f" hint-placeholder-count="4">
+                    <div style="display:flex;flex-direction:column;gap:7px">
+                      <label style="font-size:12px;font-weight:600;color:#9AA1AB">{{ f.label }}</label>
+                      <input type="text" value="{{ f.value }}" style="height:42px;padding:0 13px;background:#0F1114;border:1px solid #24272C;border-radius:11px;color:#F2F4F7;font-size:13.5px;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.12)">
+                    </div>
+                  </sc-for>
+                </div>
+                <button type="button" onClick="{{ saveSettings }}" style="margin-top:22px;height:40px;padding:0 18px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s" style-hover="background:#4BE6B8">Save changes</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isBrandingTab }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="font-size:15px;font-weight:700">Branding</div>
+                <div style="margin-top:6px;font-size:12.5px;color:#79808A">Applied to your public booking page and course portal.</div>
+                <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                  <div style="height:150px;border:1px dashed #2C3037;border-radius:14px;background:repeating-linear-gradient(135deg,#0F1114 0 10px,#121417 10px 20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+                    <span style="font-family:'Material Symbols Rounded';font-size:24px;color:#2FD8A6">image</span>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6C737C">logo · svg or png</div>
+                  </div>
+                  <div style="padding:16px;border-radius:14px;background:#0F1114;border:1px solid #1E2126">
+                    <div style="font-size:12.5px;font-weight:600;color:#9AA1AB">Accent color</div>
+                    <div style="margin-top:12px;display:flex;gap:10px">
+                      <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="5">
+                        <button type="button" onClick="{{ s.onClick }}" title="{{ s.name }}" style="width:34px;height:34px;border-radius:10px;background:{{ s.color }};border:2px solid {{ s.border }};cursor:pointer;transition:transform .18s cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.08)"></button>
+                      </sc-for>
+                    </div>
+                    <div style="margin-top:18px;font-size:12.5px;font-weight:600;color:#9AA1AB">Portal theme</div>
+                    <div style="margin-top:10px;display:flex;gap:8px">
+                      <sc-for list="{{ themeOptions }}" as="t" hint-placeholder-count="2">
+                        <button type="button" onClick="{{ t.onClick }}" style="height:32px;padding:0 14px;border:1px solid {{ t.border }};border-radius:9px;background:{{ t.bg }};color:{{ t.color }};font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .18s">{{ t.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isNotifTab }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="font-size:15px;font-weight:700">Notifications</div>
+                <div style="margin-top:6px;font-size:12.5px;color:#79808A">Choose what reaches your inbox and what stays in-app.</div>
+                <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="5">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border-radius:12px;background:#0F1114;border:1px solid #1E2126">
+                      <div>
+                        <div style="font-size:13.5px;font-weight:600">{{ n.label }}</div>
+                        <div style="margin-top:3px;font-size:12px;color:#79808A">{{ n.desc }}</div>
+                      </div>
+                      <button type="button" onClick="{{ n.onToggle }}" style="width:40px;height:23px;flex:0 0 auto;border:none;border-radius:12px;background:{{ n.trackBg }};position:relative;cursor:pointer;transition:background .22s cubic-bezier(.4,0,.2,1)">
+                        <span style="position:absolute;top:3px;left:{{ n.knobLeft }};width:17px;height:17px;border-radius:50%;background:{{ n.knobBg }};transition:left .22s cubic-bezier(.4,0,.2,1)"></span>
+                      </button>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isIntegrationsTab }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="font-size:15px;font-weight:700">Integrations</div>
+                <div style="margin-top:6px;font-size:12.5px;color:#79808A">Connect payments, calendars and email.</div>
+                <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <sc-for list="{{ integrations }}" as="i" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:13px;padding:16px;border-radius:13px;background:#0F1114;border:1px solid #1E2126;transition:border-color .2s" style-hover="border-color:#33373E">
+                      <span style="width:38px;height:38px;flex:0 0 auto;border-radius:11px;background:{{ i.tint }};color:{{ i.ink }};display:flex;align-items:center;justify-content:center;font-family:'Material Symbols Rounded';font-size:20px">{{ i.icon }}</span>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:13.5px;font-weight:700">{{ i.name }}</div>
+                        <div style="margin-top:2px;font-size:11.5px;color:#79808A">{{ i.state }}</div>
+                      </div>
+                      <button type="button" onClick="{{ i.onClick }}" style="height:31px;padding:0 12px;border:1px solid {{ i.btnBorder }};border-radius:9px;background:{{ i.btnBg }};color:{{ i.btnColor }};font-size:12px;font-weight:700;cursor:pointer;transition:background .18s">{{ i.cta }}</button>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      </div>
+    </div>
+  </main>
+</div>
+</sc-if>
+
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(6,7,9,.72);backdrop-filter:blur(6px);animation:cfFade .18s ease both">
+    <div onClick="{{ stop }}" style="width:100%;max-width:440px;background:#131518;border:1px solid #24272C;border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.6);animation:cfPop .22s cubic-bezier(.22,1,.36,1) both">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;padding:22px 22px 0">
+        <div>
+          <div style="font-size:16px;font-weight:700;letter-spacing:-.01em">{{ modalTitle }}</div>
+          <div style="margin-top:5px;font-size:12.5px;color:#79808A">{{ modalSub }}</div>
+        </div>
+        <button type="button" onClick="{{ closeModal }}" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:none;border-radius:9px;background:#191C20;color:#8A9099;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px;transition:background .18s" style-hover="background:#22262B">close</button>
+      </div>
+      <div style="padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+        <sc-for list="{{ modalFields }}" as="f" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <label style="font-size:12px;font-weight:600;color:#9AA1AB">{{ f.label }}</label>
+            <input type="text" placeholder="{{ f.placeholder }}" style="height:44px;padding:0 13px;background:#0F1114;border:1px solid #24272C;border-radius:11px;color:#F2F4F7;font-size:13.5px;outline:none;transition:border-color .18s,box-shadow .18s" style-focus="border-color:#2FD8A6;box-shadow:0 0 0 3px rgba(47,216,166,.12)">
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;padding:0 22px 22px">
+        <button type="button" onClick="{{ closeModal }}" style="height:40px;padding:0 16px;border:1px solid #24272C;border-radius:11px;background:#15171A;color:#C6CBD2;font-size:13px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Cancel</button>
+        <button type="button" onClick="{{ submitModal }}" style="height:40px;padding:0 18px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s" style-hover="background:#4BE6B8">{{ modalCta }}</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ eventOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeEvent }}" style="position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(6,7,9,.72);backdrop-filter:blur(6px);animation:cfFade .18s ease both">
+    <div onClick="{{ stop }}" style="width:100%;max-width:400px;background:#131518;border:1px solid #24272C;border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.6);padding:22px;animation:cfPop .22s cubic-bezier(.22,1,.36,1) both">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="display:inline-flex;height:24px;align-items:center;padding:0 10px;border-radius:7px;background:rgba(47,216,166,.14);color:#2FD8A6;font-size:11.5px;font-weight:700">1-on-1 session</span>
+        <button type="button" onClick="{{ closeEvent }}" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:none;border-radius:9px;background:#191C20;color:#8A9099;cursor:pointer;font-family:'Material Symbols Rounded';font-size:18px;transition:background .18s" style-hover="background:#22262B">close</button>
+      </div>
+      <div style="margin-top:16px;font-size:18px;font-weight:700;letter-spacing:-.01em">{{ eventTitle }}</div>
+      <div style="margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#9AA1AB">{{ eventWhen }}</div>
+      <div style="margin-top:16px;padding:14px;border-radius:12px;background:#0F1114;border:1px solid #1E2126;font-size:13px;line-height:1.6;color:#9AA1AB">{{ eventNotes }}</div>
+      <div style="margin-top:18px;display:flex;gap:10px">
+        <button type="button" onClick="{{ joinCall }}" style="flex:1;height:42px;display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:11px;background:#2FD8A6;color:#06251C;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s" style-hover="background:#4BE6B8">
+          <span style="font-family:'Material Symbols Rounded';font-size:18px">videocam</span>Join call
+        </button>
+        <button type="button" onClick="{{ reschedule }}" style="height:42px;padding:0 16px;border:1px solid #24272C;border-radius:11px;background:#15171A;color:#C6CBD2;font-size:13px;font-weight:600;cursor:pointer;transition:background .18s" style-hover="background:#1B1E22">Reschedule</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;right:24px;bottom:24px;z-index:90;display:flex;align-items:center;gap:12px;padding:14px 16px;min-width:280px;background:#15181C;border:1px solid {{ toastBorder }};border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:cfToast .26s cubic-bezier(.22,1,.36,1) both">
+    <span style="width:30px;height:30px;flex:0 0 auto;border-radius:9px;background:{{ toastTint }};color:{{ toastColor }};display:flex;align-items:center;justify-content:center;font-family:'Material Symbols Rounded';font-size:18px">{{ toastIcon }}</span>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;font-weight:700">{{ toastTitle }}</div>
+      <div style="margin-top:2px;font-size:12px;color:#79808A">{{ toastBody }}</div>
+    </div>
+    <button type="button" onClick="{{ hideToast }}" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:none;border-radius:8px;background:transparent;color:#6C737C;cursor:pointer;font-family:'Material Symbols Rounded';font-size:16px;transition:color .18s" style-hover="color:#F2F4F7">close</button>
+  </div>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startOnLogin&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo state&quot;},&quot;sidebarCollapsed&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo state&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'home', collapsed: false, loading: false, profileOpen: false,
+    query: '', filter: 'All', selected: null, detailTab: 'Notes', page: 1,
+    modal: null, toast: null, event: null, range: '12M', billing: 'Monthly',
+    courseView: 'list', lessonSel: 0, dragFrom: null, playerIdx: 0, lessonIdx: 0,
+    calView: 'Week', settingsTab: 'Profile', accent: '#2FD8A6',
+    counts: { students: 0, revenue: 0, completion: 0, sessions: 0 },
+    lessons: [
+      { title: 'Welcome & how this works', meta: 'Video · 6:12', icon: 'play_circle' },
+      { title: 'Mapping your current week', meta: 'Video · 14:38 · worksheet', icon: 'play_circle' },
+      { title: 'The weekly review ritual', meta: 'Video · 12:04 · worksheet', icon: 'play_circle' },
+      { title: 'Designing your energy blocks', meta: 'Draft · no media', icon: 'edit_note' },
+      { title: 'Live Q&A recording', meta: 'Video · 51:20', icon: 'play_circle' }
+    ],
+    avail: [true, true, true, false, true],
+    notifs: [true, true, false, true, false]
+  };
+
+  clients = [
+    ['Maya Okonjo', 'maya.o@northline.co', 'Active', 82, '2h ago', '$4,200'],
+    ['Devon Ruiz', 'devon@ruizfit.com', 'Trial', 24, 'Yesterday', '$0'],
+    ['Priya Nair', 'priya.nair@mail.com', 'Active', 96, '4h ago', '$7,800'],
+    ['Tomás Silva', 'tomas@silva.studio', 'Paused', 61, '9 days ago', '$2,150'],
+    ['Erin Walsh', 'erin.walsh@hey.com', 'Active', 45, 'Today', '$3,400'],
+    ['Kofi Mensah', 'kofi@brightpath.io', 'Active', 73, '1h ago', '$5,600'],
+    ['Sofia Rossi', 'sofia.rossi@mail.it', 'Churned', 38, '2 months ago', '$980'],
+    ['Jonas Berg', 'jonas@bergco.se', 'Trial', 12, '3 days ago', '$0'],
+    ['Amara Diallo', 'amara@diallo.co', 'Active', 88, 'Today', '$6,100'],
+    ['Wren Halloway', 'wren@halloway.design', 'Paused', 52, '3 weeks ago', '$1,750'],
+    ['Nikhil Rao', 'nikhil@raoventures.com', 'Active', 67, '6h ago', '$4,950'],
+    ['Clara Bennett', 'clara.b@studio9.co', 'Active', 34, 'Yesterday', '$2,300']
+  ].map(c => ({ name: c[0], email: c[1], status: c[2], progress: c[3], lastActive: c[4], ltv: c[5] }));
+
+  revenue = [8.2, 9.1, 8.6, 11.4, 12.9, 12.1, 14.8, 15.6, 14.2, 16.9, 17.4, 18.4];
+  months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
+
+  events = [
+    { day: 1, start: 9.5, dur: 1, title: 'Maya Okonjo', notes: 'Q3 goal reset. Bring the revised offer ladder and last month’s pipeline numbers.' },
+    { day: 1, start: 14, dur: 1.5, title: 'Cohort office hours', notes: 'Open room for the Momentum cohort. 14 registered, expect ~9.' },
+    { day: 2, start: 11, dur: 1, title: 'Kofi Mensah', notes: 'Mid-program check-in. He flagged burnout risk in week 4 — revisit workload.' },
+    { day: 3, start: 10, dur: 1, title: 'Priya Nair', notes: 'Final session of the 12-week arc. Prep the graduation summary + testimonial ask.' },
+    { day: 3, start: 15.5, dur: 1, title: 'Discovery — J. Berg', notes: 'Trial user, came from the newsletter. Qualify for the Momentum tier.' },
+    { day: 4, start: 9, dur: 1.5, title: 'Erin Walsh', notes: 'Positioning workshop. She wants to niche into fractional CMO work.' },
+    { day: 5, start: 13, dur: 1, title: 'Amara Diallo', notes: 'Renewal conversation. Annual upgrade likely — have pricing ready.' }
+  ];
+
+  componentDidMount() {
+    const targets = { students: 248, revenue: 18420, completion: 87, sessions: 12 };
+    const t0 = performance.now(), dur = 1000;
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      this.setState({ counts: {
+        students: Math.round(targets.students * e), revenue: Math.round(targets.revenue * e),
+        completion: Math.round(targets.completion * e), sessions: Math.round(targets.sessions * e)
+      } });
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    if (this.props.startOnLogin) this.setState({ screen: 'login' });
+    if (this.props.sidebarCollapsed) this.setState({ collapsed: true });
+  }
+
+  toast(title, body, kind) {
+    clearTimeout(this._tt);
+    this.setState({ toast: { title, body, kind: kind || 'success' } });
+    this._tt = setTimeout(() => this.setState({ toast: null }), 3600);
+  }
+
+  go = (screen) => {
+    const heavy = screen === 'clients' || screen === 'payments';
+    this.setState({ screen, profileOpen: false, selected: null, page: 1, loading: heavy });
+    if (heavy) setTimeout(() => this.setState({ loading: false }), 620);
+  };
+
+  tint(name) {
+    const hues = [165, 205, 32, 275, 340, 130];
+    const h = hues[name.charCodeAt(0) % hues.length];
+    return { tint: `oklch(0.32 0.06 ${h})`, ink: `oklch(0.88 0.11 ${h})` };
+  }
+  initials(n) { return n.split(' ').map(p => p[0]).slice(0, 2).join(''); }
+  statusStyle(s) {
+    const map = {
+      Active: ['rgba(47,216,166,.13)', '#2FD8A6'], Trial: ['rgba(84,150,255,.14)', '#7CB0FF'],
+      Paused: ['rgba(240,180,60,.13)', '#E9B84C'], Churned: ['rgba(150,158,168,.12)', '#98A0AA']
+    };
+    return map[s] || map.Churned;
+  }
+
+  renderVals() {
+    const s = this.state, accent = '#2FD8A6';
+    const on = (bg, color) => ({ bg, color });
+
+    const navDefs = [
+      ['home', 'Dashboard', 'space_dashboard'], ['clients', 'Clients', 'group'],
+      ['courses', 'Courses', 'school'], ['calendar', 'Calendar', 'calendar_month'],
+      ['payments', 'Payments', 'payments'], ['settings', 'Settings', 'settings']
+    ];
+    const nav = navDefs.map(([id, label, icon]) => {
+      const active = s.screen === id;
+      return { label, icon, bg: active ? 'rgba(47,216,166,.12)' : 'transparent',
+        color: active ? accent : '#8A9099', weight: active ? 700 : 500, onClick: () => this.go(id) };
+    });
+
+    const titles = {
+      home: ['Dashboard', 'Tuesday, 11 August · here’s where the business stands'],
+      clients: ['Clients', '248 people across 4 programs'],
+      courses: [
+        s.courseView === 'list' ? 'Courses' : s.courseView === 'player' ? 'Lesson player' : 'Course editor',
+        s.courseView === 'list' ? '6 IT programs · 2,600 enrollments' : s.courseView === 'player' ? 'Streaming inside CoachFlow' : 'Draft · last saved 4 minutes ago'
+      ],
+      calendar: ['Calendar', '12 sessions booked this week'],
+      payments: ['Payments', 'Stripe connected · payouts every Friday'],
+      settings: ['Settings', 'Workspace, branding and integrations']
+    };
+    const [screenTitle, screenSub] = titles[s.screen] || titles.home;
+
+    // chart
+    const max = 20, W = 720, H = 210;
+    const pts = this.revenue.map((v, i) => [i * (W / 11), H - (v / max) * H + 14]);
+    const linePath = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+    const areaPath = `${linePath} L${W} 240 L0 240 Z`;
+
+    const filtered = this.clients
+      .filter(c => s.filter === 'All' || c.status === s.filter)
+      .filter(c => !s.query || (c.name + c.email).toLowerCase().includes(s.query.toLowerCase()));
+    const perPage = 8;
+    const pageCount = Math.max(1, Math.ceil(filtered.length / perPage));
+    const page = Math.min(s.page, pageCount);
+    const slice = filtered.slice((page - 1) * perPage, page * perPage);
+
+    const visibleClients = slice.map(c => {
+      const t = this.tint(c.name), st = this.statusStyle(c.status);
+      return { ...c, ...t, initials: this.initials(c.name), progressW: c.progress + '%',
+        statusBg: st[0], statusColor: st[1],
+        rowBg: s.selected === c.name ? '#16191D' : 'transparent',
+        onOpen: () => this.setState({ selected: c.name, detailTab: 'Notes' }) };
+    });
+
+    const sel = this.clients.find(c => c.name === s.selected);
+    const detail = sel ? { ...sel, ...this.tint(sel.name), initials: this.initials(sel.name) } : {};
+    const detailData = {
+      Notes: [
+        { icon: 'sticky_note_2', title: 'Positioning is the bottleneck', meta: 'Aug 4', body: 'Keeps rewriting the offer instead of shipping it. Assigned the 48-hour launch constraint.' },
+        { icon: 'sticky_note_2', title: 'Wants async between sessions', meta: 'Jul 22', body: 'Prefers Loom updates over live calls in week 3–4. Trialing a hybrid cadence.' }
+      ],
+      Payments: [
+        { icon: 'payments', title: 'Momentum · Monthly', meta: 'Aug 1', body: '$450 · Visa ending 4218 · succeeded' },
+        { icon: 'payments', title: 'Momentum · Monthly', meta: 'Jul 1', body: '$450 · Visa ending 4218 · succeeded' },
+        { icon: 'payments', title: 'Intensive add-on', meta: 'Jun 14', body: '$1,200 · one-time · succeeded' }
+      ],
+      Sessions: [
+        { icon: 'videocam', title: 'Strategy call #9', meta: 'Aug 6', body: '50 min · recording + transcript attached' },
+        { icon: 'videocam', title: 'Strategy call #8', meta: 'Jul 30', body: '50 min · homework: draft two offer variants' }
+      ]
+    };
+
+    const activity = [
+      ['person_add', 'Clara Bennett joined Momentum OS', '12 minutes ago', 'rgba(47,216,166,.12)', accent],
+      ['payments', 'Payment of $450 from Priya Nair', '1 hour ago', 'rgba(84,150,255,.14)', '#7CB0FF'],
+      ['task_alt', 'Kofi Mensah completed “Energy blocks”', '3 hours ago', 'rgba(47,216,166,.12)', accent],
+      ['event_available', 'Erin Walsh booked Thursday 9:00', '5 hours ago', 'rgba(240,180,60,.13)', '#E9B84C'],
+      ['reply', 'Devon Ruiz replied in the cohort thread', 'Yesterday', 'rgba(150,158,168,.12)', '#98A0AA']
+    ].map(a => ({ icon: a[0], text: a[1], time: a[2], tint: a[3], color: a[4] }));
+
+    const courseRows = [
+      ['Web Development Bootcamp', 'Web Development', 'HTML, CSS, JavaScript and React from first tag to deploy.', 139, 486, 'Published', 'oklch(0.33 0.07 250)', 'code editor screen, split view', 'https://youtube.com/playlist?list=PLu0W_9lII9agq5TrH9XLIKQvv0iaF2X3w'],
+      ['Python for Beginners to Advanced', 'Programming', 'Syntax to OOP, automation scripts and packaging.', 100, 612, 'Published', 'oklch(0.34 0.07 105)', 'terminal running python', 'https://youtube.com/playlist?list=PLu0W_9lII9agwh1XjRt242xIpHhPT2llg'],
+      ['Data Structures & Algorithms', 'Computer Science', 'Arrays to graphs, with interview-grade problem sets.', 92, 529, 'Published', 'oklch(0.32 0.07 295)', 'whiteboard graph sketch', 'https://youtube.com/playlist?list=PLu0W_9lII9ahIappRPN0MCAgtOu3lQjQi'],
+      ['Cybersecurity Fundamentals', 'Security', 'Threat models, network defence and hands-on labs.', 9, 274, 'Published', 'oklch(0.32 0.07 20)', 'padlock over server rack', 'https://youtu.be/v3iUx2SNspY'],
+      ['Cloud Computing with AWS', 'Cloud / DevOps', 'EC2, S3, IAM and CI/CD pipelines end to end.', 11, 358, 'Published', 'oklch(0.33 0.07 55)', 'cloud architecture diagram', 'https://youtu.be/N4sJj-SxX00'],
+      ['UI/UX Design Fundamentals', 'Design', 'Research, wireframes, design systems and handoff.', 8, 341, 'Draft', 'oklch(0.33 0.07 330)', 'wireframe mockups on desk', 'https://youtu.be/h87xnT004Aw']
+    ];
+    const covers = { 'Web Development Bootcamp': 'covers/web-development.png', 'Python for Beginners to Advanced': 'covers/python.png', 'Cybersecurity Fundamentals': 'covers/cybersecurity.png', 'Cloud Computing with AWS': 'covers/cloud-aws.png', 'Data Structures & Algorithms': 'covers/dsa.png', 'UI/UX Design Fundamentals': 'covers/uiux.png' };
+    const courses = courseRows.map((c, ci) => {
+      const src = covers[c[0]];
+      const isList = c[8].indexOf('list=') !== -1;
+      return { title: c[0], category: c[1], desc: c[2], modules: c[3], students: c[4], state: c[5], tint: c[6], shot: c[7], url: c[8],
+        coverImg: src ? `url("${src}")` : 'none',
+        coverStripes: src ? 'none' : 'repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 8px,transparent 8px 16px)',
+        labelDisplay: src ? 'none' : 'inline',
+        metaLabel: isList ? `${c[3]} videos` : 'Single comprehensive course',
+        playLabel: isList ? 'Watch playlist' : 'Watch lesson',
+        onOpen: () => this.setState({ courseView: 'player', playerIdx: ci, lessonIdx: 0 }) };
+    });
+
+    const lessons = s.lessons.map((l, i) => ({
+      ...l, num: String(i + 1).padStart(2, '0'),
+      bg: s.lessonSel === i ? '#16191D' : '#0F1114',
+      border: s.lessonSel === i ? 'rgba(47,216,166,.4)' : '#1E2126',
+      iconColor: l.icon === 'play_circle' ? '#5E656E' : '#E9B84C',
+      opacity: s.dragFrom === i ? 0.45 : 1,
+      onSelect: () => this.setState({ lessonSel: i }),
+      onDragStart: () => this.setState({ dragFrom: i }),
+      onDragOver: (e) => e.preventDefault(),
+      onDragEnd: () => this.setState({ dragFrom: null }),
+      onDrop: (e) => {
+        e.preventDefault();
+        const from = s.dragFrom;
+        if (from === null || from === i) return;
+        const next = s.lessons.slice();
+        next.splice(i, 0, next.splice(from, 1)[0]);
+        this.setState({ lessons: next, dragFrom: null, lessonSel: i });
+        this.toast('Lesson reordered', `“${next[i].title}” moved to position ${i + 1}.`);
+      }
+    }));
+
+    const hours = ['8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
+    const openEvent = (ev) => this.setState({ event: ev });
+    const weekColumns = [0, 1, 2, 3, 4, 5, 6].map(d => ({
+      events: this.events.filter(e => e.day === d).map(e => ({
+        title: e.title, time: `${this.fmtTime(e.start)} – ${this.fmtTime(e.start + e.dur)}`,
+        top: ((e.start - 8) * 56) + 'px', height: (e.dur * 56 - 6) + 'px',
+        accent: accent, bg: 'rgba(47,216,166,.10)', onClick: () => openEvent(e)
+      }))
+    }));
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dow, i) => ({
+      dow, num: 9 + i, color: i === 2 ? accent : '#E6E9ED'
+    }));
+    const monthCells = Array.from({ length: 35 }, (_, i) => {
+      const num = i - 4;
+      const inMonth = num >= 1 && num <= 31;
+      const evs = inMonth && this.events.filter((e, k) => (num + k) % 9 === 0).slice(0, 2)
+        .map(e => ({ title: e.title, bg: 'rgba(47,216,166,.13)', onClick: () => openEvent(e) })) || [];
+      return { num: inMonth ? num : '', bg: inMonth ? '#0F1114' : 'transparent',
+        color: num === 11 ? accent : '#9AA1AB', events: evs };
+    });
+
+    const availability = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((day, i) => {
+      const isOn = s.avail[i];
+      return { day, slot: isOn ? '09:00 – 17:00' : 'Unavailable', slotColor: isOn ? '#9AA1AB' : '#5E656E',
+        trackBg: isOn ? accent : '#26292F', knobLeft: isOn ? '19px' : '3px', knobBg: isOn ? '#06251C' : '#8A9099',
+        onToggle: () => { const a = s.avail.slice(); a[i] = !a[i]; this.setState({ avail: a }); } };
+    });
+
+    const barVals = s.billing === 'Monthly' ? this.revenue : [96, 112, 141, 158, 174, 190, 168, 205, 221, 214, 236, 248];
+    const bars = barVals.map((v, i) => ({
+      h: Math.round((v / Math.max(...barVals)) * 150) + 'px',
+      bg: i === barVals.length - 1 ? accent : '#22333A',
+      delay: (i * 45) + 'ms',
+      label: s.billing === 'Monthly' ? this.months[i] : String(2015 + i).slice(2)
+    }));
+
+    const transactions = [
+      ['Priya Nair', 'Momentum · Annual', '$4,320', 'Aug 6, 2026', 'Paid'],
+      ['Kofi Mensah', 'Momentum · Monthly', '$450', 'Aug 5, 2026', 'Paid'],
+      ['Amara Diallo', 'Intensive add-on', '$1,200', 'Aug 4, 2026', 'Paid'],
+      ['Erin Walsh', 'Offer Lab · Monthly', '$220', 'Aug 3, 2026', 'Paid'],
+      ['Jonas Berg', 'Momentum · Monthly', '$450', 'Aug 3, 2026', 'Pending'],
+      ['Wren Halloway', 'Offer Lab · Monthly', '$220', 'Aug 1, 2026', 'Failed'],
+      ['Maya Okonjo', 'Momentum · Monthly', '$450', 'Aug 1, 2026', 'Paid'],
+      ['Nikhil Rao', 'Client Engine · Annual', '$2,160', 'Jul 30, 2026', 'Paid'],
+      ['Clara Bennett', 'Momentum · Monthly', '$450', 'Jul 29, 2026', 'Refunded']
+    ].map(t => {
+      const map = { Paid: ['rgba(47,216,166,.13)', accent], Pending: ['rgba(240,180,60,.13)', '#E9B84C'],
+        Failed: ['rgba(255,110,110,.13)', '#FF8E8E'], Refunded: ['rgba(150,158,168,.12)', '#98A0AA'] };
+      return { name: t[0], plan: t[1], amount: t[2], date: t[3], status: t[4],
+        ...this.tint(t[0]), initials: this.initials(t[0]),
+        statusBg: map[t[4]][0], statusColor: map[t[4]][1] };
+    });
+
+    const modalSpecs = {
+      client: { title: 'Add client', sub: 'They’ll get an invite email with portal access.', cta: 'Send invite',
+        fields: [{ label: 'Full name', placeholder: 'Alex Moreau' }, { label: 'Email', placeholder: 'alex@company.com' }, { label: 'Program', placeholder: 'Momentum OS' }] },
+      booking: { title: 'New booking', sub: 'Creates a calendar hold and emails the client.', cta: 'Create booking',
+        fields: [{ label: 'Client', placeholder: 'Search clients…' }, { label: 'Date & time', placeholder: 'Thu 13 Aug · 10:00' }, { label: 'Agenda', placeholder: 'What are we covering?' }] },
+      plans: { title: 'Edit pricing tiers', sub: 'Changes apply to new subscribers only.', cta: 'Save tiers',
+        fields: [{ label: 'Starter', placeholder: '$220 / month' }, { label: 'Momentum', placeholder: '$450 / month' }, { label: 'Intensive', placeholder: '$1,200 one-time' }] }
+    };
+    const spec = modalSpecs[s.modal] || { title: '', sub: '', cta: '', fields: [] };
+
+    const toastKind = s.toast && s.toast.kind === 'error';
+    const ev = s.event;
+
+    return {
+      isLogin: s.screen === 'login', isApp: s.screen !== 'login',
+      nav, screenKey: s.screen + s.courseView, screenTitle, screenSub,
+      sidebarWidth: s.collapsed ? '78px' : '244px',
+      labelDisplay: s.collapsed ? 'none' : 'block',
+      collapseIcon: s.collapsed ? 'chevron_right' : 'chevron_left',
+      toggleSidebar: () => this.setState({ collapsed: !s.collapsed }),
+      signIn: () => { this.setState({ screen: 'home' }); this.toast('Signed in', 'Welcome back, Maya.'); },
+      profileOpen: s.profileOpen,
+      toggleProfile: () => this.setState({ profileOpen: !s.profileOpen }),
+      profileMenu: [
+        { icon: 'person', label: 'Your profile', onClick: () => { this.setState({ profileOpen: false }); this.go('settings'); } },
+        { icon: 'tune', label: 'Workspace settings', onClick: () => { this.setState({ profileOpen: false }); this.go('settings'); } },
+        { icon: 'logout', label: 'Sign out', onClick: () => this.setState({ screen: 'login', profileOpen: false }) }
+      ],
+      notify: () => this.toast('3 new notifications', 'Two bookings and one failed payment.'),
+      upgrade: () => this.toast('Upgrade started', 'Pro unlocks unlimited cohorts.'),
+
+      isHome: s.screen === 'home',
+      stats: [
+        { label: 'Active students', icon: 'group', value: s.counts.students.toLocaleString(), delta: '+12.4%', trendIcon: 'arrow_upward', trendColor: accent },
+        { label: 'Monthly revenue', icon: 'payments', value: '$' + s.counts.revenue.toLocaleString(), delta: '+8.1%', trendIcon: 'arrow_upward', trendColor: accent },
+        { label: 'Completion rate', icon: 'task_alt', value: s.counts.completion + '%', delta: '−2.3%', trendIcon: 'arrow_downward', trendColor: '#FF8E8E' },
+        { label: 'Upcoming sessions', icon: 'event', value: s.counts.sessions, delta: '+4', trendIcon: 'arrow_upward', trendColor: accent }
+      ],
+      rangeTabs: ['3M', '6M', '12M'].map(l => ({ label: l, ...(s.range === l ? on('#1B1E22', '#F2F4F7') : on('transparent', '#79808A')), onClick: () => this.setState({ range: l }) })),
+      gridLines: [40, 90, 140, 190].map(y => ({ y })),
+      linePath, areaPath, months: this.months,
+      chartDots: pts.map((p, i) => ({ x: p[0].toFixed(1), y: p[1].toFixed(1), r: i === pts.length - 1 ? 5 : 0 })),
+      quickActions: [
+        { icon: 'person_add', label: 'Add client', onClick: () => this.setState({ modal: 'client' }) },
+        { icon: 'upload', label: 'Upload lesson', onClick: () => { this.setState({ screen: 'courses', courseView: 'builder' }); } },
+        { icon: 'link', label: 'Create booking link', onClick: () => this.toast('Link copied', 'coachflow.co/maya/30min') }
+      ],
+      activity,
+
+      isClients: s.screen === 'clients',
+      query: s.query, onQuery: (e) => this.setState({ query: e.target.value, page: 1 }),
+      filters: ['All', 'Active', 'Trial', 'Paused', 'Churned'].map(l => ({ label: l, ...(s.filter === l ? on('#1B1E22', '#F2F4F7') : on('transparent', '#79808A')), onClick: () => this.setState({ filter: l, page: 1, selected: null }) })),
+      columns: [
+        { label: 'Client', align: 'flex-start' }, { label: 'Status', align: 'flex-start' },
+        { label: 'Progress', align: 'flex-start' }, { label: 'Last active', align: 'flex-start' }, { label: '', align: 'flex-end' }
+      ].map(c => ({ ...c, color: '#79808A', arrow: 'arrow_downward', arrowOpacity: c.label === 'Client' ? 1 : 0, onClick: () => this.toast('Sorted', `Table sorted by ${c.label || 'default'}.`) })),
+      crmColumns: sel ? 'minmax(0,1.6fr) 380px' : 'minmax(0,1fr)',
+      loading: s.loading,
+      skeletons: ['160px', '120px', '190px', '140px', '170px', '130px'].map(w => ({ w })),
+      showRows: !s.loading && visibleClients.length > 0,
+      clientsEmpty: !s.loading && visibleClients.length === 0,
+      visibleClients,
+      pageLabel: `${filtered.length ? (page - 1) * perPage + 1 : 0}–${Math.min(page * perPage, filtered.length)} of ${filtered.length} clients`,
+      prevPage: () => this.setState({ page: Math.max(1, page - 1) }),
+      nextPage: () => this.setState({ page: Math.min(pageCount, page + 1) }),
+      hasSelectedClient: !!sel, detail,
+      detailTabs: ['Notes', 'Payments', 'Sessions'].map(l => ({ label: l, ...(s.detailTab === l ? on('#1B1E22', '#F2F4F7') : on('transparent', '#79808A')), onClick: () => this.setState({ detailTab: l }) })),
+      detailRows: detailData[s.detailTab] || [],
+      closeDetail: () => this.setState({ selected: null }),
+      openAddClient: () => this.setState({ modal: 'client' }),
+
+      isPlayer: s.screen === 'courses' && s.courseView === 'player',
+      ...this.playerVals(courses, s),
+      openBuilderFromPlayer: () => this.setState({ courseView: 'builder', lessonSel: 0 }),
+      isCoursesList: s.screen === 'courses' && s.courseView === 'list',
+      isBuilder: s.screen === 'courses' && s.courseView === 'builder',
+      courses,
+      newCourse: () => this.setState({ courseView: 'builder', lessonSel: 0 }),
+      backToCourses: () => this.setState({ courseView: 'list' }),
+      saveDraft: () => this.toast('Draft saved', 'All 5 lessons stored.'),
+      publish: () => this.toast('Course published', 'Momentum OS is live for 214 students.'),
+      lessons,
+      addLesson: () => this.setState({ lessons: s.lessons.concat([{ title: 'Untitled lesson', meta: 'Draft · no media', icon: 'edit_note' }]) }),
+      lessonTitle: (s.lessons[s.lessonSel] || {}).title || '',
+      onLessonTitle: (e) => { const n = s.lessons.slice(); n[s.lessonSel] = { ...n[s.lessonSel], title: e.target.value }; this.setState({ lessons: n }); },
+      resources: ['weekly-review.pdf', 'energy-map.xlsx'],
+      attach: () => this.toast('Resource attached', 'session-prompts.pdf added to lesson.'),
+
+      isCalendar: s.screen === 'calendar',
+      calTabs: ['Week', 'Month'].map(l => ({ label: l, ...(s.calView === l ? on('#1B1E22', '#F2F4F7') : on('transparent', '#79808A')), onClick: () => this.setState({ calView: l }) })),
+      calRange: s.calView === 'Week' ? 'Aug 9 – Aug 15, 2026' : 'August 2026',
+      isWeekView: s.calView === 'Week', isMonthView: s.calView === 'Month',
+      hours, weekColumns, weekDays, monthCells,
+      dowLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      availability,
+      limits: [{ label: 'Buffer between sessions', value: '15 min' }, { label: 'Max bookings per day', value: '4' }, { label: 'Minimum notice', value: '12 h' }],
+      copyLink: () => this.toast('Booking link copied', 'coachflow.co/maya'),
+      openBooking: () => this.setState({ modal: 'booking' }),
+
+      isPayments: s.screen === 'payments',
+      grossVolume: s.billing === 'Monthly' ? '$18,420' : '$214,860',
+      billingTabs: ['Monthly', 'Yearly'].map(l => ({ label: l, ...(s.billing === l ? on('#1B1E22', '#F2F4F7') : on('transparent', '#79808A')), onClick: () => this.setState({ billing: l }) })),
+      bars, transactions,
+      plans: [
+        { name: 'Starter', price: '$220/mo', detail: '46 subscribers · group access', share: '28%', border: '#1E2126' },
+        { name: 'Momentum', price: '$450/mo', detail: '112 subscribers · 1-on-1 included', share: '61%', border: 'rgba(47,216,166,.3)' },
+        { name: 'Intensive', price: '$1,200', detail: '9 active · one-time engagement', share: '11%', border: '#1E2126' }
+      ],
+      editPlans: () => this.setState({ modal: 'plans' }),
+      exportCsv: () => this.toast('Export queued', 'CSV will land in your inbox shortly.'),
+
+      isSettings: s.screen === 'settings',
+      settingsTabs: [['Profile', 'person'], ['Branding', 'palette'], ['Notifications', 'notifications'], ['Integrations', 'extension']]
+        .map(([label, icon]) => ({ label, icon, ...(s.settingsTab === label ? on('rgba(47,216,166,.12)', accent) : on('transparent', '#8A9099')), onClick: () => this.setState({ settingsTab: label }) })),
+      isProfileTab: s.settingsTab === 'Profile', isBrandingTab: s.settingsTab === 'Branding',
+      isNotifTab: s.settingsTab === 'Notifications', isIntegrationsTab: s.settingsTab === 'Integrations',
+      profileFields: [
+        { label: 'Display name', value: 'Maya Chen' }, { label: 'Headline', value: 'Business coach for solo consultants' },
+        { label: 'Email', value: 'maya@studio.co' }, { label: 'Booking handle', value: 'coachflow.co/maya' }
+      ],
+      uploadPhoto: () => this.toast('Photo updated', 'New avatar applied everywhere.'),
+      removePhoto: () => this.toast('Photo removed', 'Initials will be shown instead.', 'error'),
+      saveSettings: () => this.toast('Settings saved', 'Profile updated.'),
+      swatches: ['#2FD8A6', '#5B9CFF', '#E9B84C', '#C77DFF', '#FF8E8E'].map(c => ({
+        color: c, name: c, border: s.accent === c ? '#F2F4F7' : 'transparent',
+        onClick: () => { this.setState({ accent: c }); this.toast('Accent updated', 'Your public page now uses ' + c + '.'); } })),
+      themeOptions: ['Dark', 'Light'].map((l, i) => ({ label: l, bg: i === 0 ? '#1B1E22' : 'transparent',
+        color: i === 0 ? '#F2F4F7' : '#79808A', border: i === 0 ? '#33373E' : '#24272C',
+        onClick: () => this.toast('Theme set', l + ' portal theme applied.') })),
+      notifications: [
+        ['New booking', 'Email me whenever a client books a slot'], ['Payment received', 'Receipts and payout summaries'],
+        ['Lesson completed', 'Digest when a student finishes a module'], ['Failed payment', 'Immediate alert with retry link'],
+        ['Weekly summary', 'Monday morning business recap']
+      ].map(([label, desc], i) => {
+        const isOn = s.notifs[i];
+        return { label, desc, trackBg: isOn ? accent : '#26292F', knobLeft: isOn ? '20px' : '3px',
+          knobBg: isOn ? '#06251C' : '#8A9099',
+          onToggle: () => { const n = s.notifs.slice(); n[i] = !n[i]; this.setState({ notifs: n }); } };
+      }),
+      integrations: [
+        ['Stripe', 'Connected · payouts Fridays', 'payments', true], ['Google Calendar', 'Connected · 2-way sync', 'calendar_month', true],
+        ['Zoom', 'Not connected', 'videocam', false], ['Mailchimp', 'Not connected', 'mail', false]
+      ].map(([name, state, icon, connected]) => ({
+        name, state, icon, tint: connected ? 'rgba(47,216,166,.12)' : '#191C20', ink: connected ? accent : '#8A9099',
+        cta: connected ? 'Manage' : 'Connect', btnBg: connected ? '#15171A' : accent,
+        btnColor: connected ? '#C6CBD2' : '#06251C', btnBorder: connected ? '#24272C' : accent,
+        onClick: () => this.toast(connected ? name + ' settings' : name + ' connected', connected ? 'Opening connection details.' : 'Authorization complete.') })),
+
+      modalOpen: !!s.modal, modalTitle: spec.title, modalSub: spec.sub, modalCta: spec.cta, modalFields: spec.fields,
+      closeModal: () => this.setState({ modal: null }),
+      stop: (e) => e.stopPropagation(),
+      submitModal: () => { const m = s.modal; this.setState({ modal: null });
+        this.toast(m === 'client' ? 'Invite sent' : m === 'booking' ? 'Booking created' : 'Tiers saved',
+          m === 'client' ? 'They’ll get portal access in a moment.' : m === 'booking' ? 'Calendar hold added and client notified.' : 'New pricing applies to future subscribers.'); },
+
+      eventOpen: !!ev, eventTitle: ev ? ev.title : '', eventNotes: ev ? ev.notes : '',
+      eventWhen: ev ? `Tue 11 Aug · ${this.fmtTime(ev.start)} – ${this.fmtTime(ev.start + ev.dur)}` : '',
+      closeEvent: () => this.setState({ event: null }),
+      joinCall: () => { this.setState({ event: null }); this.toast('Joining call', 'Opening the session room…'); },
+      reschedule: () => { this.setState({ event: null }); this.toast('Reschedule sent', 'Client received three new time options.'); },
+
+      toastOpen: !!s.toast, toastTitle: s.toast ? s.toast.title : '', toastBody: s.toast ? s.toast.body : '',
+      toastIcon: toastKind ? 'error' : 'check_circle', toastColor: toastKind ? '#FF8E8E' : accent,
+      toastTint: toastKind ? 'rgba(255,110,110,.13)' : 'rgba(47,216,166,.13)',
+      toastBorder: toastKind ? 'rgba(255,110,110,.3)' : 'rgba(47,216,166,.28)',
+      hideToast: () => this.setState({ toast: null })
+    };
+  }
+
+  playlistTitles = {
+    'Web Development Bootcamp': [
+      ['How the web actually works', '11:24'], ['HTML structure & semantics', '18:40'], ['CSS layout: flexbox', '22:05'],
+      ['CSS grid & responsive rules', '25:12'], ['JavaScript fundamentals', '31:58'], ['DOM & events', '27:33'],
+      ['Fetch, APIs and async', '24:47'], ['Intro to React', '35:02'], ['State & component patterns', '29:19'],
+      ['Routing and forms', '21:56'], ['Build & deploy', '19:08'], ['Capstone walkthrough', '42:31']
+    ],
+    'Python for Beginners to Advanced': [
+      ['Setup & first script', '09:52'], ['Variables and types', '16:31'], ['Control flow', '18:14'],
+      ['Functions & scope', '20:47'], ['Lists, dicts, sets', '23:05'], ['Files and exceptions', '17:44'],
+      ['Modules & packaging', '21:19'], ['OOP: classes', '28:36'], ['Decorators & generators', '26:02'],
+      ['Working with APIs', '24:15'], ['Data with pandas', '33:40'], ['Automation scripts', '29:07'],
+      ['Testing basics', '18:58'], ['Final project', '46:12']
+    ],
+    'Data Structures & Algorithms': [
+      ['Complexity & Big-O', '19:33'], ['Arrays and strings', '24:18'], ['Linked lists', '27:41'],
+      ['Stacks & queues', '21:07'], ['Hash tables', '25:52'], ['Recursion patterns', '30:14'],
+      ['Sorting algorithms', '34:26'], ['Binary search', '18:49'], ['Trees & traversals', '32:03'],
+      ['Binary search trees', '28:37'], ['Heaps & priority queues', '23:11'], ['Graphs: BFS & DFS', '36:45'],
+      ['Shortest paths', '31:22'], ['Dynamic programming I', '38:09'], ['Dynamic programming II', '35:54'],
+      ['Interview problem set', '44:30']
+    ]
+  };
+
+  chapters = {
+    'Cybersecurity Fundamentals': [
+      ['Course introduction', '0:00', 0], ['Threat landscape today', '6:40', 400], ['CIA triad & risk basics', '18:20', 1100],
+      ['Networking for defenders', '32:00', 1920], ['Attacks: phishing to ransomware', '51:40', 3100],
+      ['Cryptography essentials', '1:12:00', 4320], ['Access control & identity', '1:31:40', 5500],
+      ['Hands-on lab walkthrough', '1:53:20', 6800], ['Incident response', '2:15:00', 8100], ['Career paths & certs', '2:30:00', 9000]
+    ],
+    'Cloud Computing with AWS': [
+      ['What cloud computing is', '0:00', 0], ['AWS global infrastructure', '8:20', 500], ['IAM: users, roles, policies', '21:40', 1300],
+      ['EC2 and compute', '40:00', 2400], ['S3 and storage classes', '1:03:20', 3800], ['VPC and networking', '1:25:00', 5100],
+      ['Databases: RDS & DynamoDB', '1:46:40', 6400], ['CI/CD pipelines', '2:08:20', 7700],
+      ['Monitoring & cost control', '2:26:40', 8800], ['Deploying the final project', '2:45:00', 9900]
+    ],
+    'UI/UX Design Fundamentals': [
+      ['What UX really means', '0:00', 0], ['Research & interviews', '7:30', 450], ['Personas and journeys', '19:10', 1150],
+      ['Information architecture', '31:40', 1900], ['Wireframing basics', '45:00', 2700], ['Visual hierarchy & type', '1:01:40', 3700],
+      ['Color and contrast', '1:16:40', 4600], ['Design systems & components', '1:33:20', 5600],
+      ['Prototyping & testing', '1:51:40', 6700], ['Developer handoff', '2:08:20', 7700]
+    ]
+  };
+
+  playerVals(courses, s) {
+    const c = courses[s.playerIdx] || courses[0];
+    if (!c) return {};
+    const isList = c.url.indexOf('list=') !== -1;
+    const listId = isList ? c.url.split('list=')[1] : null;
+    const videoId = isList ? null : c.url.split('youtu.be/')[1];
+    const named = this.playlistTitles[c.title] || [];
+    const entries = isList
+      ? Array.from({ length: c.modules }, (_, i) => named[i] || [`Lesson ${i + 1}`, 'From the playlist'])
+      : (this.chapters[c.title] || []);
+    const idx = Math.min(s.lessonIdx, Math.max(0, entries.length - 1));
+    const start = (!isList && entries[idx]) ? entries[idx][2] : 0;
+    const embedSrc = isList
+      ? `https://www.youtube.com/embed/videoseries?list=${listId}&index=${idx + 1}&rel=0`
+      : `https://www.youtube.com/embed/${videoId}?rel=0&start=${start}`;
+    return {
+      embedSrc, playerTitle: c.title, playerCategory: c.category, playerDesc: c.desc,
+      playerModules: c.metaLabel, playerStudents: c.students,
+      playerSource: isList ? 'YouTube playlist' : 'Single YouTube lesson',
+      playlistTitle: isList ? 'Course content' : 'Chapters',
+      playlistMeta: isList ? `${entries.length} videos · streamed from the playlist` : `${entries.length} timestamps in this lesson`,
+      playlist: entries.map((t, i) => {
+        const active = i === idx;
+        return { title: t[0], meta: isList ? `${String(i + 1).padStart(2, '0')} · ${t[1]}` : t[1],
+          bg: active ? 'rgba(47,216,166,.10)' : 'transparent',
+          color: active ? '#F2F4F7' : '#C6CBD2',
+          icon: active ? 'play_circle' : 'play_arrow',
+          iconColor: active ? '#2FD8A6' : '#5E656E',
+          onClick: () => this.setState({ lessonIdx: i }) };
+      })
+    };
+  }
+
+  fmtTime(v) {
+    const h = Math.floor(v), m = Math.round((v - h) * 60);
+    const ampm = h >= 12 ? 'PM' : 'AM', hh = h > 12 ? h - 12 : h;
+    return `${hh}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+}
+</script>
+</body>
+</html>
