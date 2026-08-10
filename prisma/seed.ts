@@ -28,6 +28,10 @@ const paymentStatusMap = {
   Refunded: 'REFUNDED',
 } as const;
 
+// Deterministic-but-varied progress percentages for the enrollment seeding below.
+const PROGRESS_CYCLE = [92, 68, 45, 100, 30, 77, 15, 60, 88];
+const SECOND_PROGRESS_CYCLE = [10, 55, 40];
+
 async function main() {
   console.log('Clearing existing demo data...');
   await prisma.payment.deleteMany();
@@ -49,18 +53,22 @@ async function main() {
   });
 
   console.log(`Creating ${courses.length} courses...`);
-  await prisma.course.createMany({
-    data: courses.map((c) => ({
-      title: c.title,
-      description: c.description,
-      category: c.category,
-      coverImageUrl: c.coverImageUrl,
-      videoSourceUrl: c.videoSourceUrl,
-      videoSourceType: c.videoSourceType,
-      moduleCount: c.moduleCount,
-      coachId: coach.id,
-    })),
-  });
+  const createdCourses = await Promise.all(
+    courses.map((c) =>
+      prisma.course.create({
+        data: {
+          title: c.title,
+          description: c.description,
+          category: c.category,
+          coverImageUrl: c.coverImageUrl,
+          videoSourceUrl: c.videoSourceUrl,
+          videoSourceType: c.videoSourceType,
+          moduleCount: c.moduleCount,
+          coachId: coach.id,
+        },
+      }),
+    ),
+  );
 
   console.log(`Creating ${clients.length} clients...`);
   const createdClients = await Promise.all(
@@ -102,6 +110,8 @@ async function main() {
   }
 
   console.log(`Creating ${transactions.length} payments...`);
+  const payerStudents: { id: string }[] = [];
+  const seenPayerEmails = new Set<string>();
   for (const [i, t] of transactions.entries()) {
     const client = clientByName.get(t.name);
     if (!client) {
@@ -115,6 +125,10 @@ async function main() {
       update: {},
       create: { name: client.name, email: client.email, role: 'STUDENT' },
     });
+    if (!seenPayerEmails.has(payerUser.email)) {
+      seenPayerEmails.add(payerUser.email);
+      payerStudents.push({ id: payerUser.id });
+    }
     await prisma.payment.create({
       data: {
         userId: payerUser.id,
@@ -125,6 +139,26 @@ async function main() {
         createdAt: new Date(t.date),
       },
     });
+  }
+
+  console.log('Creating enrollments...');
+  // Spreads the payer-students across courses so course cards show real (if
+  // modest — there are only 9 seeded students) enrollment counts instead of 0.
+  for (const [i, student] of payerStudents.entries()) {
+    const primaryCourse = createdCourses[i % createdCourses.length];
+    await prisma.enrollment.create({
+      data: { userId: student.id, courseId: primaryCourse.id, progressPercent: PROGRESS_CYCLE[i % PROGRESS_CYCLE.length] },
+    });
+    if (i % 2 === 0) {
+      const secondaryCourse = createdCourses[(i + 3) % createdCourses.length];
+      await prisma.enrollment.create({
+        data: {
+          userId: student.id,
+          courseId: secondaryCourse.id,
+          progressPercent: SECOND_PROGRESS_CYCLE[Math.floor(i / 2) % SECOND_PROGRESS_CYCLE.length],
+        },
+      });
+    }
   }
 
   console.log('Done.');
