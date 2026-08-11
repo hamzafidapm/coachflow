@@ -58,15 +58,29 @@ model User {
   role         Role     @default(STUDENT)
   createdAt    DateTime @default(now())
 
-  coachedCourses Course[]       @relation("CoachCourses")
+  coachedCourses Course[]             @relation("CoachCourses")
   enrollments    Enrollment[]
-  clients        Client[]       @relation("CoachClients")
-  bookings       Booking[]      @relation("CoachBookings")
+  clients        Client[]             @relation("CoachClients")
+  bookings       Booking[]            @relation("CoachBookings")
   subscriptions  Subscription[]
   payments       Payment[]
   coachSettings  CoachSettings?
+  resetTokens    PasswordResetToken[]
 
   @@map("users")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
 
 model Course {
@@ -128,13 +142,13 @@ model Booking {
 }
 
 model Subscription {
-  id                   String              @id @default(cuid())
+  id                   String             @id @default(cuid())
   userId               String
-  user                 User                @relation(fields: [userId], references: [id])
+  user                 User               @relation(fields: [userId], references: [id])
   stripeCustomerId     String
-  stripeSubscriptionId String              @unique
+  stripeSubscriptionId String             @unique
   plan                 String
-  status               SubscriptionStatus  @default(TRIALING)
+  status               SubscriptionStatus @default(TRIALING)
   currentPeriodEnd     DateTime
 
   @@map("subscriptions")
@@ -156,17 +170,17 @@ model Payment {
 // One row per coach — keeps User lean while holding everything the Settings
 // screen (Profile/Branding/Notifications/Integrations) needs to persist.
 model CoachSettings {
-  id             String      @id @default(cuid())
-  coachId        String      @unique
-  coach          User        @relation(fields: [coachId], references: [id])
+  id      String @id @default(cuid())
+  coachId String @unique
+  coach   User   @relation(fields: [coachId], references: [id])
 
   // Profile
-  headline       String      @default("")
-  bookingHandle  String      @default("")
+  headline      String @default("")
+  bookingHandle String @default("")
 
   // Branding
-  accentColor    String      @default("#2FD8A6")
-  portalTheme    PortalTheme @default(DARK)
+  accentColor String      @default("#2FD8A6")
+  portalTheme PortalTheme @default(DARK)
 
   // Notifications
   notifyNewBooking      Boolean @default(true)
