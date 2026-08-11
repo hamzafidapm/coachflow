@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@/components/icon';
 import { GlobalSearch } from '@/components/global-search';
+import { NotificationsBell } from '@/components/notifications-bell';
 
 const titles: Record<string, [string, string]> = {
   '/dashboard': ['Dashboard', "Tuesday, 11 August · here's where the business stands"],
@@ -49,13 +50,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
 
       <GlobalSearch />
 
-      <button
-        type="button"
-        className="relative w-11 h-11 flex-none flex items-center justify-center border border-border-strong rounded-[11px] bg-surface text-text-muted transition-colors hover:bg-[#191C20] hover:text-text"
-      >
-        <Icon name="notifications" className="text-xl" />
-        <span className="absolute top-2 right-[9px] w-[7px] h-[7px] rounded-full bg-accent ring-2 ring-surface" />
-      </button>
+      <NotificationsBell />
 
       <div className="relative">
         <button
