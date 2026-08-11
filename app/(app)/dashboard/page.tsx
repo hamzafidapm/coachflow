@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { getDemoCoach } from '@/lib/demo-coach';
+import { timedFetch } from '@/lib/timing';
 import { StatCard, type Stat } from '@/components/stat-card';
 import { RevenueChart } from '@/components/revenue-chart';
 import { QuickActions } from '@/components/quick-actions';
@@ -8,23 +9,27 @@ import { ActivityFeed } from '@/components/activity-feed';
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  const coach = await getDemoCoach();
+  const [activeClients, revenueThisMonth, completion, upcomingSessions] = await timedFetch(
+    'dashboard: coach + 4 aggregates',
+    async () => {
+      const coach = await getDemoCoach();
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
-  const now = new Date();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-
-  const [activeClients, revenueThisMonth, completion, upcomingSessions] = await Promise.all([
-    prisma.client.count({ where: { coachId: coach.id, status: 'ACTIVE' } }),
-    prisma.payment.aggregate({
-      _sum: { amount: true },
-      where: { status: 'SUCCEEDED', createdAt: { gte: startOfMonth, lt: startOfNextMonth } },
-    }),
-    prisma.enrollment.aggregate({ _avg: { progressPercent: true } }),
-    prisma.booking.count({
-      where: { coachId: coach.id, status: 'SCHEDULED', scheduledAt: { gte: now } },
-    }),
-  ]);
+      return Promise.all([
+        prisma.client.count({ where: { coachId: coach.id, status: 'ACTIVE' } }),
+        prisma.payment.aggregate({
+          _sum: { amount: true },
+          where: { status: 'SUCCEEDED', createdAt: { gte: startOfMonth, lt: startOfNextMonth } },
+        }),
+        prisma.enrollment.aggregate({ _avg: { progressPercent: true } }),
+        prisma.booking.count({
+          where: { coachId: coach.id, status: 'SCHEDULED', scheduledAt: { gte: now } },
+        }),
+      ]);
+    },
+  );
 
   // Trend deltas ("+12.4% vs last month") aren't derivable without a longer
   // history of seed data, so they stay illustrative — same as in the original

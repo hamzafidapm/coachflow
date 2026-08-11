@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
 import { getDemoCoach } from '@/lib/demo-coach';
+import { timedFetch } from '@/lib/timing';
 import { formatRelativeTime, formatCentsAsDollars, formatShortDate } from '@/lib/format';
 import { type ClientStatus, type ClientView } from '@/lib/data/clients';
 import { ClientsView } from '@/components/clients-view';
@@ -12,35 +13,40 @@ function titleCase(status: string): ClientStatus {
 }
 
 export default async function ClientsPage() {
-  const coach = await getDemoCoach();
-  const dbClients = await prisma.client.findMany({
-    where: { coachId: coach.id },
-    orderBy: { name: 'asc' },
-    select: { id: true, name: true, email: true, status: true, notes: true, lastActivityAt: true },
+  const { dbClients, payers, bookings } = await timedFetch('clients: coach + clients + payers/bookings', async () => {
+    const coach = await getDemoCoach();
+    const dbClients = await prisma.client.findMany({
+      where: { coachId: coach.id },
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true, email: true, status: true, notes: true, lastActivityAt: true },
+    });
+
+    // Client (CRM contact) and User (platform login) are separate models in this
+    // schema — payments/enrollments/notes live on User. Bridge them by email,
+    // the same way prisma/seed.ts links a payer account to its client record.
+    // Neither query below depends on the other, so run them in parallel instead
+    // of a sequential waterfall.
+    const emails = dbClients.map((c) => c.email);
+    const clientIds = dbClients.map((c) => c.id);
+    const [payers, bookings] = await Promise.all([
+      prisma.user.findMany({
+        where: { email: { in: emails } },
+        select: {
+          email: true,
+          payments: { select: { amount: true, currency: true, status: true, createdAt: true } },
+          enrollments: { select: { progressPercent: true } },
+        },
+      }),
+      prisma.booking.findMany({
+        where: { coachId: coach.id, clientId: { in: clientIds } },
+        orderBy: { scheduledAt: 'desc' },
+        select: { clientId: true, scheduledAt: true, duration: true, status: true, notes: true },
+      }),
+    ]);
+
+    return { dbClients, payers, bookings };
   });
 
-  // Client (CRM contact) and User (platform login) are separate models in this
-  // schema — payments/enrollments/notes live on User. Bridge them by email,
-  // the same way prisma/seed.ts links a payer account to its client record.
-  // Neither query below depends on the other, so run them in parallel instead
-  // of a sequential waterfall.
-  const emails = dbClients.map((c) => c.email);
-  const clientIds = dbClients.map((c) => c.id);
-  const [payers, bookings] = await Promise.all([
-    prisma.user.findMany({
-      where: { email: { in: emails } },
-      select: {
-        email: true,
-        payments: { select: { amount: true, currency: true, status: true, createdAt: true } },
-        enrollments: { select: { progressPercent: true } },
-      },
-    }),
-    prisma.booking.findMany({
-      where: { coachId: coach.id, clientId: { in: clientIds } },
-      orderBy: { scheduledAt: 'desc' },
-      select: { clientId: true, scheduledAt: true, duration: true, status: true, notes: true },
-    }),
-  ]);
   const payerByEmail = new Map(payers.map((p) => [p.email, p]));
 
   const bookingsByClientId = new Map<string, typeof bookings>();

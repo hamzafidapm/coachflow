@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { timedFetch } from '@/lib/timing';
 import { formatCentsAsDollars, formatDateWithYear } from '@/lib/format';
 import { paymentStatusToTx } from '@/lib/data/payments';
 import { PaymentsView } from '@/components/payments-view';
@@ -7,30 +8,32 @@ import { type TransactionRow } from '@/components/transactions-table';
 export const dynamic = 'force-dynamic';
 
 export default async function PaymentsPage() {
-  const now = new Date();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const [monthlyAgg, yearlyAgg, payments] = await timedFetch('payments: 2 aggregates + findMany', () => {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-  const [monthlyAgg, yearlyAgg, payments] = await Promise.all([
-    prisma.payment.aggregate({
-      _sum: { amount: true },
-      where: { status: 'SUCCEEDED', createdAt: { gte: startOfMonth, lt: startOfNextMonth } },
-    }),
-    prisma.payment.aggregate({
-      _sum: { amount: true },
-      where: { status: 'SUCCEEDED', createdAt: { gte: startOfYear } },
-    }),
-    prisma.payment.findMany({
-      orderBy: { createdAt: 'desc' },
-      select: {
-        amount: true,
-        status: true,
-        createdAt: true,
-        user: { select: { name: true, email: true } },
-      },
-    }),
-  ]);
+    return Promise.all([
+      prisma.payment.aggregate({
+        _sum: { amount: true },
+        where: { status: 'SUCCEEDED', createdAt: { gte: startOfMonth, lt: startOfNextMonth } },
+      }),
+      prisma.payment.aggregate({
+        _sum: { amount: true },
+        where: { status: 'SUCCEEDED', createdAt: { gte: startOfYear } },
+      }),
+      prisma.payment.findMany({
+        orderBy: { createdAt: 'desc' },
+        select: {
+          amount: true,
+          status: true,
+          createdAt: true,
+          user: { select: { name: true, email: true } },
+        },
+      }),
+    ]);
+  });
 
   const transactions: TransactionRow[] = payments.map((p) => ({
     name: p.user.name ?? p.user.email,

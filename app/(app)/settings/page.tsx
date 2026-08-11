@@ -1,12 +1,16 @@
 import { prisma } from '@/lib/prisma';
 import { getDemoCoach } from '@/lib/demo-coach';
+import { timedFetch } from '@/lib/timing';
 import { SettingsView } from '@/components/settings-view';
 
 export const dynamic = 'force-dynamic';
 
 export default async function SettingsPage() {
-  const coach = await getDemoCoach();
-  const settings = await prisma.coachSettings.findUniqueOrThrow({ where: { coachId: coach.id } });
+  const { coach, settings } = await timedFetch('settings: coach + coachSettings', async () => {
+    const coach = await getDemoCoach();
+    const settings = await prisma.coachSettings.findUniqueOrThrow({ where: { coachId: coach.id } });
+    return { coach, settings };
+  });
 
   return (
     <SettingsView

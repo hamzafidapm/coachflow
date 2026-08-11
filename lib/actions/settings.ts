@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { getDemoCoach } from '@/lib/demo-coach';
 
@@ -28,6 +28,7 @@ export async function updateProfile(data: { name: string; headline: string; book
     where: { coachId: coach.id },
     data: { headline: data.headline, bookingHandle: data.bookingHandle },
   });
+  revalidateTag('demo-coach'); // getDemoCoach() caches the User row this just updated
   revalidatePath('/settings');
 }
 

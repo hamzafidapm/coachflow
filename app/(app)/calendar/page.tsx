@@ -1,21 +1,24 @@
 import { prisma } from '@/lib/prisma';
 import { getDemoCoach } from '@/lib/demo-coach';
+import { timedFetch } from '@/lib/timing';
 import { type CalEvent } from '@/lib/data/calendar';
 import { CalendarView } from '@/components/calendar-view';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CalendarPage() {
-  const coach = await getDemoCoach();
-  const bookings = await prisma.booking.findMany({
-    where: { coachId: coach.id },
-    orderBy: { scheduledAt: 'asc' },
-    select: {
-      scheduledAt: true,
-      duration: true,
-      notes: true,
-      client: { select: { name: true } },
-    },
+  const bookings = await timedFetch('calendar: coach + bookings', async () => {
+    const coach = await getDemoCoach();
+    return prisma.booking.findMany({
+      where: { coachId: coach.id },
+      orderBy: { scheduledAt: 'asc' },
+      select: {
+        scheduledAt: true,
+        duration: true,
+        notes: true,
+        client: { select: { name: true } },
+      },
+    });
   });
 
   // Bookings were seeded with UTC-constructed timestamps (see prisma/seed.ts),
